@@ -1,6 +1,7 @@
 # projectile.gd
 extends Area2D
 
+
 # هذه المتغيرات سيتم تحديدها من قبل اللاعب عند الإطلاق
 var damage: float = 10.0
 var speed: float = 800.0
