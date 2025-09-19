@@ -4,7 +4,7 @@ enum Direction { DOWN, UP, RIGHT, LEFT }
 var last_direction = Direction.DOWN
 
 # --- Base Stats ---
-const BASE_SPEED = 300.0
+const BASE_SPEED = 200.0
 const BASE_DAMAGE = 25.0
 const BASE_COOLDOWN = 0.5
 const BASE_MAX_HEALTH = 100.0
