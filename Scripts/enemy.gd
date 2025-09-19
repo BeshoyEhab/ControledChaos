@@ -1,47 +1,133 @@
-# enemy.gd
 extends CharacterBody2D
 
-const BASE_SPEED = 150.0
-const BASE_MAX_HEALTH = 50.0
-const BASE_DAMAGE = 10.0
-const XP_REWARD = 10
-
+# --- Variables ---
+var enemy_data: Dictionary
 var current_speed: float
 var current_health: float
 var damage: float
 var player: Node2D = null
 
+# --- Nodes ---
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var attack_timer: Timer = $AttackTimer
+
+# --- Behavior Variables ---
+var behavior_mode: String
+
 func _ready():
 	add_to_group("enemies")
+	player = get_tree().get_first_node_in_group("player")
+	
+	# --- Apply initial settings and texture fallback ---
+	if enemy_data.has("texture") and enemy_data.texture:
+		sprite.texture = enemy_data.texture
+	else:
+		# Fallback to a ColorRect if texture is missing
+		sprite.texture = null # Clear any existing texture
+		if not sprite.has_node("ColorRectFallback"):
+			var color_rect = ColorRect.new()
+			color_rect.name = "ColorRectFallback"
+			color_rect.color = Color("red") # Default fallback color for enemies
+			color_rect.size = Vector2(32, 32) # Default size, adjust as needed
+			color_rect.pivot_offset = color_rect.size / 2 # Center pivot
+			sprite.add_child(color_rect)
+
+	behavior_mode = enemy_data.get("behavior", "chase") # Get behavior
+	
+	# Connect timer signal if enemy is ranged
+	if behavior_mode == "ranged":
+		attack_timer.wait_time = enemy_data.attack_cooldown
+		attack_timer.timeout.connect(perform_ranged_attack)
+		attack_timer.start()
+
+	# Connect and update stats
 	StatsManager.stats_updated.connect(update_stats_from_manager)
 	update_stats_from_manager()
-	current_health = BASE_MAX_HEALTH * StatsManager.get_stat("enemy_max_health")
+	current_health = StatsManager.get_final_value(enemy_data.base_health, StatsManager.stats.enemy_health)
 
 func _physics_process(delta: float):
-	if player:
-		var direction = (player.global_position - global_position).normalized()
-		velocity = direction * current_speed
-		move_and_slide()
+	if not is_instance_valid(player):
+		velocity = Vector2.ZERO
+		return
 
-func update_stats_from_manager():
-	current_speed = BASE_SPEED * StatsManager.get_stat("enemy_speed")
-	damage = BASE_DAMAGE * StatsManager.get_stat("enemy_damage")
-	var old_max_health = BASE_MAX_HEALTH * StatsManager.get_stat("enemy_max_health")
-	var health_ratio = current_health / old_max_health if old_max_health > 0 else 1.0
-	var new_max_health = BASE_MAX_HEALTH * StatsManager.get_stat("enemy_max_health")
-	current_health = new_max_health * health_ratio
+	# --- Choose behavior based on behavior_mode ---
+	match behavior_mode:
+		"chase":
+			handle_chase_behavior()
+		"ranged":
+			handle_ranged_behavior()
+
+	move_and_slide()
+
+# --- Behavior Functions ---
+func handle_chase_behavior():
+	"""Simple behavior: chase the player directly."""
+	var direction = (player.global_position - global_position).normalized()
+	velocity = direction * current_speed
+	# Rotate sprite to face player (optional)
+	sprite.rotation = direction.angle()
+
+func handle_ranged_behavior():
+	"""Complex behavior: maintain distance and shoot."""
+	var direction_to_player = (player.global_position - global_position)
+	var distance = direction_to_player.length()
+	var preferred_distance = enemy_data.preferred_distance
+
+	var move_direction = Vector2.ZERO
+
+	# If player is too close, move away
+	if distance < preferred_distance - 50:
+		move_direction = -direction_to_player.normalized()
+	# If player is too far, move closer
+	elif distance > preferred_distance + 50:
+		move_direction = direction_to_player.normalized()
+	# If at ideal distance, stop moving (or strafe)
+	else:
+		move_direction = Vector2.ZERO # Stop to focus on attacking
+
+	velocity = move_direction * current_speed
+	# Rotate sprite to always face player
+	sprite.rotation = direction_to_player.angle()
+
+# --- Attack and Damage Functions ---
+func perform_ranged_attack():
+	"""Create and fire a projectile."""
+	# Don't fire if game is paused or player is invalid
+	if get_tree().paused or not is_instance_valid(player): return
+
+	print("Mage is firing!")
+	# Assume you have a projectile scene ready (can use the same as player's projectile)
+	# Make sure you have an exported projectile_scene variable in the enemy script
+	# or load it directly here
+	var projectile_scene = load("res://Scenes/Projectile.tscn") # Replace with correct path
+	var p = projectile_scene.instantiate() as CharacterBody2D
+	
+	# Setup projectile properties
+	p.damage = damage # Damage calculated from StatsManager
+	
+	# Make projectile not hit other enemies
+	p.add_to_group("enemy_projectiles") # We will need to modify projectile collision logic
+	
+	var direction = (player.global_position - global_position).normalized()
+	p.initial_velocity = direction * 500 # Projectile speed
+	p.global_position = global_position
+	
+	# You can also change projectile appearance here
+	# p.get_node("Sprite2D").texture = load("res://path/to/fireball.png")
+	
+	get_parent().add_child(p)
 
 func take_damage(amount: float):
 	current_health -= amount
-	if current_health <= 0:
-		die()
+	if current_health <= 0: die()
 
 func die():
-	StatsManager.add_xp(XP_REWARD)
+	StatsManager.add_xp(enemy_data.xp_reward)
 	var player_node = get_tree().get_first_node_in_group("player")
 	if player_node and player_node.has_method("on_enemy_killed"):
 		player_node.on_enemy_killed()
 	queue_free()
 
-# Note: You need a way to set the 'player' variable,
-# for example by using an Area2D to detect when the player is near.
+func update_stats_from_manager():
+	current_speed = StatsManager.get_final_value(enemy_data.base_speed, StatsManager.stats.enemy_speed)
+	damage = StatsManager.get_final_value(enemy_data.base_damage, StatsManager.stats.enemy_damage)

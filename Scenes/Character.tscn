@@ -439,10 +439,12 @@ shape = SubResource("CircleShape2D_6hs50")
 [node name="WeaponHolder" type="Node2D" parent="."]
 script = ExtResource("4_v7dgu")
 
-[node name="MeeleArea" type="Area2D" parent="WeaponHolder"]
+[node name="MeleeArea" type="Area2D" parent="WeaponHolder"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponHolder/MeeleArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponHolder/MeleeArea"]
 shape = SubResource("RectangleShape2D_vdqda")
 
 [node name="HitscanRay" type="RayCast2D" parent="WeaponHolder"]
 target_position = Vector2(2000, 50)
+
+[node name="Sprite2D" type="Sprite2D" parent="WeaponHolder"]

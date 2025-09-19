@@ -18,3 +18,5 @@ shape = SubResource("RectangleShape2D_k1cl8")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]

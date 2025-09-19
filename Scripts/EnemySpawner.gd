@@ -1,0 +1,92 @@
+extends Node2D
+
+# Drag your Enemy.tscn scene here in the Inspector
+@export var enemy_scene: PackedScene
+
+var player: Node2D
+
+# --- Spawn Timer Variables ---
+var base_spawn_time: float = 2.0 # Initial time between spawns
+var min_spawn_time: float = 0.5 # Fastest spawn time
+var current_spawn_time: float # Current time between spawns
+var spawn_time_decrease_rate: float = 0.05 # How much spawn time decreases per regular interval
+
+# --- Enemy Database ---
+# Now using AssetPaths for textures
+var ENEMY_TYPES = {
+	"warrior": {
+		"behavior": "chase", "texture": load(AssetPaths.ENEMY_WARRIOR_TEXTURE),
+		"base_health": 100.0, "base_speed": 100.0, "base_damage": 10.0, "xp_reward": 10
+	},
+	"orc": {
+		"behavior": "chase", "texture": load(AssetPaths.ENEMY_ORC_TEXTURE),
+		"base_health": 150.0, "base_speed": 80.0, "base_damage": 15.0, "xp_reward": 15
+	},
+	"mage": {
+		"behavior": "ranged", "texture": load(AssetPaths.ENEMY_MAGE_TEXTURE),
+		"base_health": 60.0, "base_speed": 70.0, "base_damage": 20.0, "xp_reward": 20,
+		"attack_cooldown": 3.0, "preferred_distance": 400.0
+	}
+}
+
+func _ready():
+	player = get_tree().get_first_node_in_group("player")
+	
+	# Initialize spawn time
+	current_spawn_time = base_spawn_time
+	$Timer.wait_time = current_spawn_time
+	$Timer.timeout.connect(spawn_enemy)
+	
+	# Connect to StatsManager difficulty signal
+	StatsManager.difficulty_increased.connect(_on_difficulty_increased)
+
+func _process(delta: float):
+	# Decrease spawn time gradually
+	if not get_tree().paused:
+		current_spawn_time = max(min_spawn_time, current_spawn_time - spawn_time_decrease_rate * delta)
+		$Timer.wait_time = current_spawn_time
+
+func _on_difficulty_increased():
+	# When difficulty jumps, reset spawn time to a higher value
+	base_spawn_time += 0.5 # Increase base spawn time slightly for next cycle
+	current_spawn_time = base_spawn_time * 1.5 # Reset to a larger value
+	$Timer.wait_time = current_spawn_time
+	print("Spawn timer reset to: ", current_spawn_time)
+
+func spawn_enemy():
+	if get_tree().paused or not is_instance_valid(player):
+		return
+
+	var viewport = get_viewport()
+	var camera = viewport.get_camera_2d()
+	if not camera: return
+
+	var view_rect = camera.get_viewport_rect()
+	var spawn_margin = 100.0 
+	var spawn_rect = view_rect.grow(spawn_margin)
+
+	var spawn_position = Vector2.ZERO
+	var side = randi_range(0, 3)
+
+	match side:
+		0: # Top edge
+			spawn_position.x = randf_range(spawn_rect.position.x, spawn_rect.end.x)
+			spawn_position.y = spawn_rect.position.y
+		1: # Bottom edge
+			spawn_position.x = randf_range(spawn_rect.position.x, spawn_rect.end.x)
+			spawn_position.y = spawn_rect.end.y
+		2: # Left edge
+			spawn_position.x = spawn_rect.position.x
+			spawn_position.y = randf_range(spawn_rect.position.y, spawn_rect.end.y)
+		3: # Right edge
+			spawn_position.x = spawn_rect.end.x
+			spawn_position.y = randf_range(spawn_rect.position.y, spawn_rect.end.y)
+
+	var random_enemy_key = ENEMY_TYPES.keys().pick_random()
+	var enemy_data = ENEMY_TYPES[random_enemy_key]
+	
+	var new_enemy = enemy_scene.instantiate()
+	new_enemy.enemy_data = enemy_data
+	new_enemy.global_position = spawn_position
+	
+	get_parent().add_child(new_enemy)

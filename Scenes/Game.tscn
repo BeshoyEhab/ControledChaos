@@ -1,7 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://ihcdby0lvaxw"]
+[gd_scene load_steps=11 format=3 uid="uid://ihcdby0lvaxw"]
 
-[ext_resource type="PackedScene" path="res://Scenes/Chunks.tscn" id="1_gl6un"]
+[ext_resource type="PackedScene" uid="uid://dbnx6vx75cfud" path="res://Scenes/Chunks.tscn" id="1_gl6un"]
 [ext_resource type="PackedScene" uid="uid://caekygdtxf1fu" path="res://Scenes/Character.tscn" id="1_iukft"]
+[ext_resource type="PackedScene" uid="uid://cpop36rlb46lx" path="res://Scenes/LevelUpUI.tscn" id="3_j5yw3"]
+[ext_resource type="Script" uid="uid://qohd8x3s1umo" path="res://Scripts/GameUI.gd" id="3_kldst"]
+[ext_resource type="Script" uid="uid://d3demqa2op6qd" path="res://Scripts/EnemySpawner.gd" id="5_b2bpf"]
+[ext_resource type="PackedScene" uid="uid://dkuhwwc41ups8" path="res://Scenes/Enemy.tscn" id="6_7lihs"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_iukft"]
 distance = -130.0
@@ -15,9 +19,9 @@ distance = -231.0
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kldst"]
 distance = -223.0
 
-[node name="Node2D" type="Node2D"]
+[node name="Game" type="Node2D"]
 
-[node name="Node2D" parent="." instance=ExtResource("1_gl6un")]
+[node name="Map" parent="." instance=ExtResource("1_gl6un")]
 
 [node name="Character" parent="." instance=ExtResource("1_iukft")]
 
@@ -51,3 +55,28 @@ shape = SubResource("WorldBoundaryShape2D_j5yw3")
 position = Vector2(-6, -2)
 rotation = 1.5708
 shape = SubResource("WorldBoundaryShape2D_kldst")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("3_kldst")
+
+[node name="HealthBar" type="TextureProgressBar" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="XPBar" type="TextureProgressBar" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LevelUpUI" parent="CanvasLayer" instance=ExtResource("3_j5yw3")]
+
+[node name="GameTimerLabel" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="EnemySpawner" type="Node2D" parent="."]
+script = ExtResource("5_b2bpf")
+enemy_scene = ExtResource("6_7lihs")
+
+[node name="Timer" type="Timer" parent="EnemySpawner"]
+wait_time = 1.663
+autostart = true

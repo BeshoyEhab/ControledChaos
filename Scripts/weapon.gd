@@ -1,4 +1,3 @@
-# weapon.gd
 extends Node2D
 
 var weapon_data: Dictionary
@@ -17,5 +16,20 @@ func order_attack(attack_type: String):
 		"hitscan":
 			owner_character.execute_hitscan_attack(weapon_data, attack_type)
 
-func set_appearance(texture: Texture2D):
-	sprite.texture = texture
+func set_appearance(texture_path: String):
+	if sprite:
+		var loaded_texture = load(texture_path) if texture_path else null
+		if loaded_texture:
+			sprite.texture = loaded_texture
+			if sprite.has_node("ColorRectFallback"): # Remove fallback if texture is loaded
+				sprite.get_node("ColorRectFallback").queue_free()
+		else:
+			# Fallback to a ColorRect if texture is missing
+			sprite.texture = null # Clear any existing texture
+			if not sprite.has_node("ColorRectFallback"):
+				var color_rect = ColorRect.new()
+				color_rect.name = "ColorRectFallback"
+				color_rect.color = Color("red") # Default fallback color for weapons
+				color_rect.size = Vector2(32, 32) # Default size, adjust as needed
+				color_rect.pivot_offset = color_rect.size / 2 # Center pivot
+				sprite.add_child(color_rect)
