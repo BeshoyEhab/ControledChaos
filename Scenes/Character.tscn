@@ -1,7 +1,8 @@
-[gd_scene load_steps=56 format=3 uid="uid://caekygdtxf1fu"]
+[gd_scene load_steps=57 format=3 uid="uid://caekygdtxf1fu"]
 
 [ext_resource type="Script" uid="uid://ba53cirnqd1tl" path="res://Scripts/character.gd" id="1_jo2ib"]
 [ext_resource type="Texture2D" uid="uid://bk44v1os5jte8" path="res://sprites/characters/player.png" id="1_oolk3"]
+[ext_resource type="PackedScene" uid="uid://du2jxpg7ebkws" path="res://Scenes/Projectile.tscn" id="2_677pu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vdqda"]
 atlas = ExtResource("1_oolk3")
@@ -419,6 +420,7 @@ radius = 7.0
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_mask = 4
 script = ExtResource("1_jo2ib")
+projectile_scene = ExtResource("2_677pu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-1, -14)
@@ -427,4 +429,10 @@ animation = &"Walk_Right"
 autoplay = "Idle_Down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_6hs50")
+
+[node name="FirePoint" type="Marker2D" parent="."]
+position = Vector2(3, -2)
+
+[node name="ChargeTimer" type="Timer" parent="."]
