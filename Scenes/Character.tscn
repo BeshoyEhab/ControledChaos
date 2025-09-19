@@ -423,6 +423,7 @@ script = ExtResource("1_jo2ib")
 projectile_scene = ExtResource("2_677pu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 10
 position = Vector2(-1, -14)
 sprite_frames = SubResource("SpriteFrames_a8x11")
 animation = &"Walk_Right"

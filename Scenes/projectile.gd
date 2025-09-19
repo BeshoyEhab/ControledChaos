@@ -4,8 +4,8 @@ extends Area2D
 
 # هذه المتغيرات سيتم تحديدها من قبل اللاعب عند الإطلاق
 var damage: float = 10.0
-var speed: float = 800.0
-var lifetime: float = 0.1 # مدة بقاء القذيفة بالثواني
+var speed: float = 600.0
+var lifetime: float = 1.0 # مدة بقاء القذيفة بالثواني
 
 func _ready() -> void:
 	# ربط الإشارات برمجياً

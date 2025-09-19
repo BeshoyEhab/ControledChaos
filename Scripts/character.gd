@@ -14,7 +14,7 @@ enum Direction { DOWN, UP, RIGHT, LEFT }
 # ============================================================================
 
 @export_group("Movement")
-@export var speed: float = 300.0
+@export var speed: float = 200.0
 
 @export_group("Weapons")
 @export var projectile_scene: PackedScene
