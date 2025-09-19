@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://ihcdby0lvaxw"]
+[gd_scene load_steps=7 format=3 uid="uid://ihcdby0lvaxw"]
 
+[ext_resource type="PackedScene" uid="uid://d18vlsqnecos8" path="res://Scenes/Chunks.tscn" id="1_gl6un"]
 [ext_resource type="PackedScene" uid="uid://caekygdtxf1fu" path="res://Scenes/Character.tscn" id="1_iukft"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_iukft"]
@@ -15,6 +16,8 @@ distance = -231.0
 distance = -223.0
 
 [node name="Node2D" type="Node2D"]
+
+[node name="Node2D" parent="." instance=ExtResource("1_gl6un")]
 
 [node name="Character" parent="." instance=ExtResource("1_iukft")]
 

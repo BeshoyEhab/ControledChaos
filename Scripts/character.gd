@@ -2,7 +2,7 @@
 extends CharacterBody2D
 
 # سرعة حركة اللاعب بالبكسل في الثانية.
-@export var speed: float = 100.0
+@export var speed: float = 150.0
 
 # متغير لتخزين آخر اتجاه كان اللاعب يواجهه.
 # 0: Down, 1: Up, 2: Right, 3: Left
