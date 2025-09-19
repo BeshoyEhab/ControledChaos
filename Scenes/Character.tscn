@@ -1,8 +1,9 @@
-[gd_scene load_steps=57 format=3 uid="uid://caekygdtxf1fu"]
+[gd_scene load_steps=59 format=3 uid="uid://caekygdtxf1fu"]
 
 [ext_resource type="Script" uid="uid://ba53cirnqd1tl" path="res://Scripts/character.gd" id="1_jo2ib"]
 [ext_resource type="Texture2D" uid="uid://bk44v1os5jte8" path="res://sprites/characters/player.png" id="1_oolk3"]
 [ext_resource type="PackedScene" uid="uid://du2jxpg7ebkws" path="res://Scenes/Projectile.tscn" id="2_677pu"]
+[ext_resource type="Script" uid="uid://cww2x6bqcaepu" path="res://Scripts/weapon.gd" id="4_v7dgu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vdqda"]
 atlas = ExtResource("1_oolk3")
@@ -417,6 +418,8 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_6hs50"]
 radius = 7.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdqda"]
+
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_mask = 4
 script = ExtResource("1_jo2ib")
@@ -429,10 +432,17 @@ animation = &"Walk_Right"
 autoplay = "Idle_Down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource("CircleShape2D_6hs50")
 
-[node name="FirePoint" type="Marker2D" parent="."]
-position = Vector2(3, -2)
-
 [node name="ChargeTimer" type="Timer" parent="."]
+
+[node name="WeaponHolder" type="Node2D" parent="."]
+script = ExtResource("4_v7dgu")
+
+[node name="MeeleArea" type="Area2D" parent="WeaponHolder"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponHolder/MeeleArea"]
+shape = SubResource("RectangleShape2D_vdqda")
+
+[node name="HitscanRay" type="RayCast2D" parent="WeaponHolder"]
+target_position = Vector2(2000, 50)

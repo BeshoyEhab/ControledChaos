@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://du2jxpg7ebkws"]
 
-[ext_resource type="Script" uid="uid://dk4sxoqrxvwgm" path="res://Scenes/projectile.gd" id="1_lal66"]
+[ext_resource type="Script" uid="uid://dk4sxoqrxvwgm" path="res://Scripts/projectile.gd" id="1_lal66"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k1cl8"]
 size = Vector2(1, 1)
 
-[node name="Projectile" type="Area2D"]
+[node name="Projectile" type="CharacterBody2D"]
 script = ExtResource("1_lal66")
 
 [node name="ColorRect" type="ColorRect" parent="."]
