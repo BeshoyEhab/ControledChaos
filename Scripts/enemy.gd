@@ -28,7 +28,7 @@ func _ready():
 			var color_rect = ColorRect.new()
 			color_rect.name = "ColorRectFallback"
 			color_rect.color = Color("red") # Default fallback color for enemies
-			color_rect.size = Vector2(32, 32) # Default size, adjust as needed
+			color_rect.size = Vector2(16, 16) # Default size, adjust as needed
 			color_rect.pivot_offset = color_rect.size / 2 # Center pivot
 			sprite.add_child(color_rect)
 
@@ -76,10 +76,10 @@ func handle_ranged_behavior():
 	var move_direction = Vector2.ZERO
 
 	# If player is too close, move away
-	if distance < preferred_distance - 50:
+	if distance < preferred_distance - 30:
 		move_direction = -direction_to_player.normalized()
 	# If player is too far, move closer
-	elif distance > preferred_distance + 50:
+	elif distance > preferred_distance + 30:
 		move_direction = direction_to_player.normalized()
 	# If at ideal distance, stop moving (or strafe)
 	else:
