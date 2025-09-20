@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ihcdby0lvaxw"]
+[gd_scene load_steps=9 format=3 uid="uid://ihcdby0lvaxw"]
 
 [ext_resource type="PackedScene" uid="uid://demh1bcusr7k" path="res://Scenes/Chunks.tscn" id="1_gl6un"]
 [ext_resource type="PackedScene" uid="uid://caekygdtxf1fu" path="res://Scenes/Character.tscn" id="1_iukft"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://d3demqa2op6qd" path="res://Scripts/EnemySpawner.gd" id="5_b2bpf"]
 [ext_resource type="PackedScene" uid="uid://dkuhwwc41ups8" path="res://Scenes/Enemy.tscn" id="6_7lihs"]
 [ext_resource type="PackedScene" uid="uid://c4q4hl0afd4ce" path="res://Scenes/Card.tscn" id="7_fgofq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_fgofq"]
 
 [node name="Game" type="Node2D"]
 
@@ -53,7 +55,12 @@ offset_bottom = -648.0
 card_scene = ExtResource("7_fgofq")
 
 [node name="GameTimerLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
 offset_left = -20.0
-offset_top = -130.0
 offset_right = 20.0
-offset_bottom = -107.0
+offset_bottom = 23.0
+grow_horizontal = 2
+label_settings = SubResource("LabelSettings_fgofq")
+horizontal_alignment = 1
