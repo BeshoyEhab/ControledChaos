@@ -9,8 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dkuhwwc41ups8" path="res://Scenes/Enemy.tscn" id="6_7lihs"]
 [ext_resource type="Script" uid="uid://bk4ofy55hqj7n" path="res://Scenes/player_xp.gd" id="7_bf53h"]
 [ext_resource type="PackedScene" uid="uid://c4q4hl0afd4ce" path="res://Scenes/Card.tscn" id="7_fgofq"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_fgofq"]
+[ext_resource type="Script" uid="uid://c504pqmytj8y3" path="res://Scenes/game_timer.gd" id="10_71axn"]
 
 [node name="Game" type="Node2D"]
 
@@ -60,13 +59,9 @@ offset_right = -616.0
 offset_bottom = -648.0
 card_scene = ExtResource("7_fgofq")
 
-[node name="GameTimerLabel" type="Label" parent="CanvasLayer"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 23.0
-grow_horizontal = 2
-label_settings = SubResource("LabelSettings_fgofq")
-horizontal_alignment = 1
+[node name="GameTimer" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("10_71axn")
