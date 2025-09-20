@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ihcdby0lvaxw"]
+[gd_scene load_steps=7 format=3 uid="uid://ihcdby0lvaxw"]
 
 [ext_resource type="PackedScene" uid="uid://demh1bcusr7k" path="res://Scenes/Chunks.tscn" id="1_gl6un"]
 [ext_resource type="PackedScene" uid="uid://caekygdtxf1fu" path="res://Scenes/Character.tscn" id="1_iukft"]
@@ -6,18 +6,6 @@
 [ext_resource type="Script" uid="uid://qohd8x3s1umo" path="res://Scripts/GameUI.gd" id="3_kldst"]
 [ext_resource type="Script" uid="uid://d3demqa2op6qd" path="res://Scripts/EnemySpawner.gd" id="5_b2bpf"]
 [ext_resource type="PackedScene" uid="uid://dkuhwwc41ups8" path="res://Scenes/Enemy.tscn" id="6_7lihs"]
-
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_iukft"]
-distance = -130.0
-
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gl6un"]
-distance = 3.0
-
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_j5yw3"]
-distance = -231.0
-
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kldst"]
-distance = -223.0
 
 [node name="Game" type="Node2D"]
 
@@ -35,43 +23,30 @@ drag_top_margin = 0.1
 drag_right_margin = 0.25
 drag_bottom_margin = 0.1
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2(-1, 0)
-scale = Vector2(2, 2)
-
-[node name="Up" type="CollisionShape2D" parent="StaticBody2D"]
-rotation = 3.14159
-shape = SubResource("WorldBoundaryShape2D_iukft")
-
-[node name="Down" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(1, 132)
-shape = SubResource("WorldBoundaryShape2D_gl6un")
-
-[node name="Right" type="CollisionShape2D" parent="StaticBody2D"]
-rotation = 4.71239
-shape = SubResource("WorldBoundaryShape2D_j5yw3")
-
-[node name="Left" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(-6, -2)
-rotation = 1.5708
-shape = SubResource("WorldBoundaryShape2D_kldst")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="Character"]
 script = ExtResource("3_kldst")
 
-[node name="HealthBar" type="ProgressBar" parent="CanvasLayer"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="HealthBar" type="ProgressBar" parent="Character/CanvasLayer"]
+offset_left = -228.0
+offset_top = -129.0
+offset_right = -188.0
+offset_bottom = -89.0
 
-[node name="XPBar" type="ProgressBar" parent="CanvasLayer"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="XPBar" type="ProgressBar" parent="Character/CanvasLayer"]
+offset_left = -229.0
+offset_top = -85.0
+offset_right = -189.0
+offset_bottom = -45.0
 
-[node name="LevelUpUI" parent="CanvasLayer" instance=ExtResource("3_j5yw3")]
+[node name="LevelUpUI" parent="Character/CanvasLayer" instance=ExtResource("3_j5yw3")]
+offset_left = -2.0
+offset_right = -2.0
 
-[node name="GameTimerLabel" type="Label" parent="CanvasLayer"]
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="GameTimerLabel" type="Label" parent="Character/CanvasLayer"]
+offset_left = -19.0
+offset_top = -128.0
+offset_right = 21.0
+offset_bottom = -105.0
 
 [node name="EnemySpawner" type="Node2D" parent="."]
 script = ExtResource("5_b2bpf")

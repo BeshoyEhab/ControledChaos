@@ -1,8 +1,9 @@
-[gd_scene load_steps=59 format=3 uid="uid://caekygdtxf1fu"]
+[gd_scene load_steps=60 format=3 uid="uid://caekygdtxf1fu"]
 
 [ext_resource type="Script" uid="uid://ba53cirnqd1tl" path="res://Scripts/character.gd" id="1_jo2ib"]
 [ext_resource type="Texture2D" uid="uid://bk44v1os5jte8" path="res://sprites/characters/player.png" id="1_oolk3"]
 [ext_resource type="PackedScene" uid="uid://du2jxpg7ebkws" path="res://Scenes/Projectile.tscn" id="2_677pu"]
+[ext_resource type="PackedScene" uid="uid://duwqr38w7ub52" path="res://Scenes/Weapon.tscn" id="3_vdqda"]
 [ext_resource type="Script" uid="uid://cww2x6bqcaepu" path="res://Scripts/weapon.gd" id="4_v7dgu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vdqda"]
@@ -424,6 +425,7 @@ radius = 7.0
 collision_mask = 4
 script = ExtResource("1_jo2ib")
 projectile_scene = ExtResource("2_677pu")
+weapon_scene = ExtResource("3_vdqda")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 10
