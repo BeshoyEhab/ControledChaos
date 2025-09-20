@@ -5,7 +5,7 @@ signal stats_updated
 signal player_leveled_up(level, options)
 signal show_merge_screen(owned_upgrades)
 signal player_health_updated(current_health, max_health)
-signal player_xp_updated(current_xp, max_xp)
+signal player_xp_updated(current_xp, max_xp, level)
 signal difficulty_increased # New signal for the spawner
 
 # --- Stats Dictionary (The single source of truth for multipliers) ---
@@ -53,7 +53,7 @@ func _ready():
 
 func add_xp(amount: int):
 	current_xp += amount
-	player_xp_updated.emit(current_xp, xp_to_next_level)
+	player_xp_updated.emit(current_xp, xp_to_next_level, current_level)
 	while current_xp >= xp_to_next_level:
 		level_up()
 
@@ -69,6 +69,7 @@ func level_up():
 	
 	var card_options = UpgradeDB.get_random_cards(3)
 	player_leveled_up.emit(current_level, card_options)
+	player_xp_updated.emit(current_xp, xp_to_next_level, current_level)
 
 func apply_upgrade(card_key: String):
 	if not UpgradeDB.UPGRADES.has(card_key): return
