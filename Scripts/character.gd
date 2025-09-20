@@ -260,6 +260,10 @@ func execute_projectile_attack(data: Dictionary, type: String):
 		
 		# Add to player_projectiles group for friendly fire prevention
 		p.add_to_group("player_projectiles")
+		p.set_collision_layer_value(6, true)
+		p.set_collision_layer_value(5, false)
+		p.set_collision_mask_value(2, true)
+		p.set_collision_mask_value(1, false)
 		get_tree().get_root().add_child(p)
 
 func execute_melee_attack(data: Dictionary, type: String):

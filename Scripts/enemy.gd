@@ -39,6 +39,9 @@ func _ready():
 		attack_timer.wait_time = enemy_data.attack_cooldown
 		attack_timer.timeout.connect(perform_ranged_attack)
 		attack_timer.start()
+		attack_timer.one_shot = false
+	else:
+		attack_timer.one_shot = true
 
 	# Connect and update stats
 	StatsManager.stats_updated.connect(update_stats_from_manager)
@@ -62,8 +65,11 @@ func _physics_process(delta: float):
 # --- Behavior Functions ---
 func handle_chase_behavior():
 	"""Simple behavior: chase the player directly."""
-	var direction = (player.global_position - global_position).normalized()
-	velocity = direction * current_speed
+	var direction = (player.global_position - global_position)
+	if direction.length() <= 15 and attack_timer.is_stopped():
+		attack_timer.start()
+		player.take_damage(damage)
+	velocity = direction.normalized() * current_speed
 	# Rotate sprite to face player (optional)
 	sprite.rotation = direction.angle()
 
@@ -76,10 +82,10 @@ func handle_ranged_behavior():
 	var move_direction = Vector2.ZERO
 
 	# If player is too close, move away
-	if distance < preferred_distance - 30:
+	if distance < preferred_distance - 20:
 		move_direction = -direction_to_player.normalized()
 	# If player is too far, move closer
-	elif distance > preferred_distance + 30:
+	elif distance > preferred_distance + 20:
 		move_direction = direction_to_player.normalized()
 	# If at ideal distance, stop moving (or strafe)
 	else:
@@ -108,7 +114,7 @@ func perform_ranged_attack():
 	# Make projectile not hit other enemies
 	p.add_to_group("enemy_projectiles") # We will need to modify projectile collision logic
 	
-	var direction = (player.global_position - global_position).normalized()
+	var direction = to_local(player.global_position).normalized()
 	p.initial_velocity = direction * 500 # Projectile speed
 	p.global_position = global_position
 	

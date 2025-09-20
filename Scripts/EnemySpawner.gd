@@ -25,7 +25,7 @@ var ENEMY_TYPES = {
 	"mage": {
 		"behavior": "ranged", "texture": load(AssetPaths.ENEMY_MAGE_TEXTURE),
 		"base_health": 60.0, "base_speed": 70.0, "base_damage": 20.0, "xp_reward": 20,
-		"attack_cooldown": 3.0, "preferred_distance": 400.0
+		"attack_cooldown": 3.0, "preferred_distance": 250.0
 	}
 }
 

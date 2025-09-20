@@ -11,6 +11,7 @@ func _ready():
 	StatsManager.player_xp_updated.connect(_on_xp_updated)
 	# Ensure bars are visible from the start
 	health_bar.visible = true
+	health_bar.value = 100.0
 	xp_bar.visible = true
 	game_timer_label.visible = true
 
