@@ -13,16 +13,13 @@ func _ready():
 	player_hb.max_hp = 100.0
 	player_hb.current_hp = 100.0
 	game_timer.set_max_time(1800)
+	game_timer.start_timer(false)
 
 func _process(delta: float):
 	if not get_tree().paused:
-		game_time += delta
-		update_game_timer_display()
-
-func update_game_timer_display():
-	var minutes = floor(game_time / 60)
-	var seconds = fmod(game_time, 60)
-	game_timer_label.text = "%02d:%02d" % [minutes, seconds]
+		game_timer.resume_timer()
+	else:
+		game_timer.pause_timer()
 
 func _on_health_updated(current_health, max_health):
 	player_hb.max_hp = max_health
