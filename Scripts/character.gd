@@ -33,7 +33,7 @@ var current_weapon_node: Node2D
 @export var projectile_scene: PackedScene
 @export var weapon_scene: PackedScene
 @export var weapon_orbit_radius: float = 60.0
-@export var current_weapon_name: StringName = &"sword"
+@export var current_weapon_name: StringName = &"pistol"
 
 # --- Weapon Database ---
 var WEAPONS: Dictionary = {

@@ -4,6 +4,8 @@ extends Node2D
 @export var enemy_scene: PackedScene
 
 var player: Node2D
+var player_initial_position: Vector2
+var spawn_radius: float = 400.0
 
 # --- Spawn Timer Variables ---
 var base_spawn_time: float = 2.0 # Initial time between spawns
@@ -31,7 +33,7 @@ var ENEMY_TYPES = {
 
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
-	
+
 	# Initialize spawn time
 	current_spawn_time = base_spawn_time
 	$Timer.wait_time = current_spawn_time
@@ -57,31 +59,13 @@ func spawn_enemy():
 	if get_tree().paused or not is_instance_valid(player):
 		return
 
-	var viewport = get_viewport()
-	var camera = viewport.get_camera_2d()
-	if not camera: return
+	# Choose a random direction first
+	var angle = randf() * TAU  # TAU is 2*PI in Godot
+	var distance = randf_range(spawn_radius/2, spawn_radius)  # Min distance 100, max spawn_radius
 
-	var view_rect = camera.get_viewport_rect()
-	var spawn_margin = 100.0 
-	var spawn_rect = view_rect.grow(spawn_margin)
-
-	var spawn_position = Vector2.ZERO
-	var side = randi_range(0, 3)
-
-	match side:
-		0: # Top edge
-			spawn_position.x = randf_range(spawn_rect.position.x, spawn_rect.end.x)
-			spawn_position.y = spawn_rect.position.y
-		1: # Bottom edge
-			spawn_position.x = randf_range(spawn_rect.position.x, spawn_rect.end.x)
-			spawn_position.y = spawn_rect.end.y
-		2: # Left edge
-			spawn_position.x = spawn_rect.position.x
-			spawn_position.y = randf_range(spawn_rect.position.y, spawn_rect.end.y)
-		3: # Right edge
-			spawn_position.x = spawn_rect.end.x
-			spawn_position.y = randf_range(spawn_rect.position.y, spawn_rect.end.y)
-
+	# Convert to cartesian coordinates
+	var offset = Vector2(cos(angle), sin(angle)) * distance
+	var spawn_position = player.global_position + offset
 	var random_enemy_key = ENEMY_TYPES.keys().pick_random()
 	var enemy_data = ENEMY_TYPES[random_enemy_key]
 	
