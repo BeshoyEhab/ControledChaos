@@ -49,6 +49,7 @@ offset_bottom = 40.0
 script = ExtResource("7_bf53h")
 
 [node name="LevelUpUI" parent="CanvasLayer" instance=ExtResource("3_j5yw3")]
+process_mode = 2
 card_scene = ExtResource("7_fgofq")
 
 [node name="GameTimer" type="Control" parent="CanvasLayer"]

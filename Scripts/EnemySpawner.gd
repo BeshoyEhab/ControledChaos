@@ -51,8 +51,6 @@ func _process(delta: float):
 func _on_difficulty_increased():
 	# When difficulty jumps, reset spawn time to a higher value
 	base_spawn_time += 0.5 # Increase base spawn time slightly for next cycle
-	current_spawn_time = base_spawn_time * 1.5 # Reset to a larger value
-	$Timer.wait_time = current_spawn_time
 	print("Spawn timer reset to: ", current_spawn_time)
 
 func spawn_enemy():

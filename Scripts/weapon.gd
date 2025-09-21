@@ -2,7 +2,20 @@
 extends Node2D
 var weapon_data: Dictionary
 var owner_character: CharacterBody2D
-@onready var sprite: Sprite2D = $Sprite2D
+var weapon: String
+
+@onready var shotgun: Sprite2D = $shotgun
+@onready var rifel: Sprite2D = $rifel
+@onready var gun: Sprite2D = $gun
+@onready var staff: Sprite2D = $staff
+
+@onready var anim_shotgun: AnimatedSprite2D = $shotgun/anim_shotgun
+@onready var anim_rifel: AnimatedSprite2D = $rifel/anim_rifel
+@onready var anim_gun: AnimatedSprite2D = $gun/anim_gun
+@onready var anim_staff: AnimatedSprite2D = $staff/anim_staff
+
+var current_sprite: Sprite2D
+var current_anim: AnimatedSprite2D
 
 func order_attack():
 	print("Weapon order_attack() called")
@@ -22,44 +35,43 @@ func order_attack():
 			owner_character.execute_melee_attack(weapon_data)
 		"hitscan":
 			owner_character.execute_hitscan_attack(weapon_data)
+	
+	current_anim.visible = true
+	current_anim.play(weapon)
+	await current_anim.animation_finished
+	current_anim.visible = false
+	
 
-func set_appearance(texture_path: String):
-	print("Setting weapon appearance: ", texture_path)
-	if sprite:
-		if texture_path != "":
-			var loaded_texture = load(texture_path)
-			if loaded_texture:
-				sprite.texture = loaded_texture
-				print("Weapon texture loaded successfully")
-				# Remove fallback if texture is loaded
-				if sprite.has_node("ColorRectFallback"):
-					sprite.get_node("ColorRectFallback").queue_free()
-			else:
-				print("Warning: Could not load weapon texture: ", texture_path)
-				_create_fallback_visual()
-		else:
-			print("No texture path provided, creating fallback")
-			_create_fallback_visual()
+func set_appearance():
+	# Hide all sprites first
+	shotgun.visible = false
+	rifel.visible = false
+	gun.visible = false
+	staff.visible = false
+	
+	# Assign and show the correct sprite and animation
+	match weapon:
+		"shotgun":
+			current_sprite = shotgun
+			current_anim = anim_shotgun
+		"rifel":
+			current_sprite = rifel
+			current_anim = anim_rifel
+		"gun":
+			current_sprite = gun 
+			current_anim = anim_gun
+		"staff":
+			current_sprite = staff
+			current_anim = anim_staff
+		# ADD THIS DEFAULT CASE
+		_:
+			print("ERROR: Unrecognized weapon name '", weapon, "'. No sprite to show.")
+			current_sprite = null # Explicitly set to null
+			current_anim = null
+	
+	# This check now prevents the crash
+	if is_instance_valid(current_sprite):
+		current_sprite.visible = true
+		print("Set appearance for weapon: ", weapon, ", sprite visible: ", current_sprite.visible)
 	else:
-		print("ERROR: No sprite node found in weapon")
-
-func _create_fallback_visual():
-	"""Create a simple colored rectangle if texture fails to load."""
-	if not sprite:
-		return
-		
-	# Clear any existing texture
-	sprite.texture = null
-	
-	# Remove existing fallback if any
-	if sprite.has_node("ColorRectFallback"):
-		sprite.get_node("ColorRectFallback").queue_free()
-	
-	# Create new fallback visual
-	var color_rect = ColorRect.new()
-	color_rect.name = "ColorRectFallback"
-	color_rect.color = Color.GRAY  # Gray for weapons
-	color_rect.size = Vector2(20, 6)  # Weapon-like shape
-	color_rect.pivot_offset = Vector2(0, color_rect.size.y / 2)  # Pivot at left center
-	sprite.add_child(color_rect)
-	print("Created fallback weapon visual")
+		print("Could not set appearance, current_sprite is not valid.")

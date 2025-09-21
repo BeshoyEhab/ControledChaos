@@ -1,6 +1,52 @@
 # UpgradeDB.gd
 extends Node
 
+var WEAPONS: Dictionary = {
+	&"gun": {
+		"attack_mode": "projectile", "weapon": "gun",
+		"projectile": "enemy", "collision_behavior": "disappear",
+		"rotate_with_velocity": true, "cooldown": 0.25, "damage": 300, "speed": 800,
+		"player_attack_cooldown": 1.0,
+		"player_projectile_count": 0,
+		"player_projectile_speed": 1.0,
+		"player_bounce_chance": 0.0,
+		"player_damage": 1.0,
+	},
+	&"shotgun": {
+		"attack_mode": "projectile", "weapon": "shotgun",
+		"projectile": "Bullet", "collision_behavior": "penetrate",
+		"rotate_with_velocity": false, "cooldown": 1.2, "damage": 150, "speed": 400,
+		"spread_angle": 4.3, "burst_count": 8, "burst_delay": 0.0, "max_range": 50,
+		"scale": 5.0, "max_penetrations": 10,
+		"player_attack_cooldown": 1.0,
+		"player_projectile_count": 10,
+		"player_projectile_speed": 1.0,
+		"player_bounce_chance": 0.0,
+		"player_damage": 1.0,
+	},
+	&"rifel": {
+		"attack_mode": "projectile", "weapon": "rifel",
+		"projectile": "Arrow", "collision_behavior": "disappear",
+		"rotate_with_velocity": true, "cooldown": 0.05, "damage": 10, "speed": 1200,
+		"burst_count": 1, "burst_delay": 0.08,
+		"player_attack_cooldown": 1.0,
+		"player_projectile_count": 0,
+		"player_projectile_speed": 1.0,
+		"player_bounce_chance": 0.0,
+		"player_damage": 1.0,
+	},
+	&"staff": {
+		"attack_mode": "projectile", "weapon": "staff",
+		"projectile": "Magic", "collision_behavior": "disappear",
+		"rotate_with_velocity": true, "cooldown": 0.5, "damage": 300, "speed": 600,
+		"player_attack_cooldown": 1.0,
+		"player_projectile_count": 0,
+		"player_projectile_speed": 1.0,
+		"player_bounce_chance": 0.0,
+		"player_damage": 1.0,
+	},
+}
+
 var UPGRADES = {
 	# --- Common Upgrades ---
 	"common_speed": {

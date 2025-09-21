@@ -14,7 +14,7 @@ var stats = {
 	"player_speed": 1.0,
 	"player_damage": 1.0,
 	"player_cooldown": 1.0,
-	"player_projectile_count": 0, # Start with 0, base is 1 in character
+	"player_projectile_count": 2, # Start with 0, base is 1 in character
 	"player_lifesteal": 0.0,
 	"player_bounce_chance": 0.0,
 	"player_projectile_speed": 1.0,
@@ -43,6 +43,7 @@ func _ready():
 	glitch_timer.wait_time = 20.0
 	glitch_timer.autostart = true
 	glitch_timer.timeout.connect(apply_random_glitch)
+	glitch_timer.start()
 
 	# Setup a timer to increase game difficulty over time
 	var difficulty_timer = Timer.new()
@@ -51,6 +52,7 @@ func _ready():
 	difficulty_timer.wait_time = 45.0 # Every 45 seconds, enemies get stronger
 	difficulty_timer.autostart = true
 	difficulty_timer.timeout.connect(increase_difficulty)
+	difficulty_timer.start()
 
 func add_xp(amount: int):
 	current_xp += amount
@@ -88,6 +90,8 @@ func increase_difficulty():
 	print("Difficulty Increased!")
 
 func apply_random_glitch():
+	var player = get_node("/root/Game/Character")
+	player.switch_weapon(UpgradeDB.WEAPONS.keys().pick_random())
 	var is_good_glitch = randf() > 0.5
 	var stat_name = stats.keys().pick_random()
 	var amount = randf_range(1.1, 1.5)

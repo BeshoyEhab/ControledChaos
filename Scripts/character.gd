@@ -45,55 +45,11 @@ const INVULN_BLINK_SPEED: float = 0.1
 @export_group("Weapons")
 @export var projectile_scene: PackedScene
 @export var weapon_scene: PackedScene
-@export var weapon_orbit_radius: float = 60.0
+@export var weapon_orbit_radius: float = 10.0
 @export var current_weapon_name: StringName = &"shotgun"
 
 # --- Weapon Database (same as before) ---
-var WEAPONS: Dictionary = {
-	&"pistol": {
-		"attack_mode": "projectile", "weapon": "pistol",
-		"projectile": "enemy", "collision_behavior": "disappear",
-		"rotate_with_velocity": true, "cooldown": 0.25, "damage": 300, "speed": 800,
-		"player_attack_cooldown": 1.0,
-		"player_projectile_count": 0,
-		"player_projectile_speed": 1.0,
-		"player_bounce_chance": 0.0,
-		"player_damage": 1.0,
-	},
-	&"shotgun": {
-		"attack_mode": "projectile", "weapon": "shotgun",
-		"projectile": "Bullet", "collision_behavior": "penetrate",
-		"rotate_with_velocity": false, "cooldown": 1.2, "damage": 150, "speed": 400,
-		"spread_angle": 4.3, "burst_count": 8, "burst_delay": 0.0, "max_range": 50,
-		"scale": 5.0, "max_penetrations": 10,
-		"player_attack_cooldown": 1.0,
-		"player_projectile_count": 0,
-		"player_projectile_speed": 1.0,
-		"player_bounce_chance": 0.0,
-		"player_damage": 1.0,
-	},
-	&"machine_gun": {
-		"attack_mode": "projectile", "weapon": "machine_gun",
-		"projectile": "Arrow", "collision_behavior": "disappear",
-		"rotate_with_velocity": true, "cooldown": 0.05, "damage": 50, "speed": 1200,
-		"burst_count": 1, "burst_delay": 0.08,
-		"player_attack_cooldown": 1.0,
-		"player_projectile_count": 0,
-		"player_projectile_speed": 1.0,
-		"player_bounce_chance": 0.0,
-		"player_damage": 1.0,
-	},
-	&"fire_magic": {
-		"attack_mode": "projectile", "weapon": "staff",
-		"projectile": "Magic", "collision_behavior": "disappear",
-		"rotate_with_velocity": true, "cooldown": 0.5, "damage": 300, "speed": 600,
-		"player_attack_cooldown": 1.0,
-		"player_projectile_count": 0,
-		"player_projectile_speed": 1.0,
-		"player_bounce_chance": 0.0,
-		"player_damage": 1.0,
-	},
-}
+var WEAPONS: Dictionary = UpgradeDB.WEAPONS
 
 func _ready():
 	add_to_group("player")
@@ -226,10 +182,7 @@ func handle_input():
 	if Input.is_action_pressed("attack"): 
 		print("Calling order_attack()")
 		order_attack()
-		
-	if Input.is_action_just_pressed("switch_weapon"): 
-		switch_weapon(WEAPONS.keys().pick_random())
-
+	
 func handle_movement():
 	var input_direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	velocity = input_direction * current_speed
@@ -254,6 +207,8 @@ func switch_weapon(weapon_name: StringName):
 	if is_instance_valid(current_weapon_node): 
 		print("Removing old weapon node")
 		current_weapon_node.queue_free()
+	while weapon_name == current_weapon_name:
+		weapon_name = WEAPONS.keys().pick_random()
 	
 	# Safety check for weapon_scene
 	if not weapon_scene:
@@ -266,9 +221,11 @@ func switch_weapon(weapon_name: StringName):
 		# Use set_meta() to store weapon data on a basic Node2D
 		current_weapon_node.set_meta("weapon_data", weapon_data)
 		current_weapon_node.set_meta("owner_character", self)
+		current_weapon_name = weapon_name
 		
 		weapon_holder.add_child(current_weapon_node)
-		current_weapon_name = weapon_name
+		current_weapon_node.weapon = weapon_name
+		current_weapon_node.set_appearance()
 		print("Created fallback weapon node")
 		return
 	
@@ -282,15 +239,11 @@ func switch_weapon(weapon_name: StringName):
 	current_weapon_node.owner_character = self
 	current_weapon_node.weapon_data = weapon_data
 	
-	# Safe weapon texture loading - use the weapon's set_appearance method if available
-	if current_weapon_node.has_method("set_appearance"):
-		current_weapon_node.set_appearance(weapon_data.get("texture_path", ""))
-	else:
-		_create_fallback_weapon_visual(current_weapon_node, weapon_data.get("texture_path", ""))
-	
 	current_weapon_node.position.x = weapon_orbit_radius
-	weapon_holder.add_child(current_weapon_node)
 	current_weapon_name = weapon_name
+	weapon_holder.add_child(current_weapon_node)
+	current_weapon_node.weapon = weapon_name
+	current_weapon_node.set_appearance()
 	print("Successfully switched to weapon: ", weapon_name)
 	print("Weapon data assigned: ", weapon_data)
 

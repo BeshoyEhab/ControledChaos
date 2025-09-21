@@ -19,6 +19,7 @@ var type: String
 @onready var anim_player: AnimatedSprite2D = %forPlayer
 @onready var anim_enemy: AnimatedSprite2D = %forEnemy
 @onready var timer: Timer = $Timer
+@onready var collision: CollisionShape2D = $CollisionShape2D
 
 func _ready():
 	print("Projectile created - Damage: ", damage, " Velocity: ", initial_velocity, " Max penetrations: ", max_penetrations)
