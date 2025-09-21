@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cf4lql05ekhcr"]
+
+[ext_resource type="AudioStream" uid="uid://rxumvfdshjb8" path="res://sprites/Default_Background.wav" id="1_fbmny"]
+
+[node name="Node2D" type="AudioStreamPlayer"]
+stream = ExtResource("1_fbmny")
+volume_db = -10.495
+autoplay = true

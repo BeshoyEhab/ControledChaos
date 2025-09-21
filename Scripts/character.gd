@@ -132,6 +132,8 @@ func take_damage(amount: float):
 		start_invulnerability()
 	
 	if current_health <= 0:
+		player_died.emit()
+		queue_free()
 		die()
 
 func start_invulnerability():
@@ -170,7 +172,6 @@ func on_enemy_killed():
 
 func die():
 	print("Player died!")
-	get_tree().reload_current_scene()
 
 # --- Input, Movement, Weapon Rotation (same as before) ---
 func handle_input():
@@ -490,9 +491,3 @@ func _on_key_collected(key_id_value: String):
 	add_key(key_id_value)
 	add_key(key_id_value)
 	print("Player now has keys: ", collected_keys)
-
-
-#func _on_key_collected(key_id_value: String):
-	#add_key(key_id_value)
-	#print("Player now has keys: ", collected_keys)
->>>>>>> d0151c78d9113f0abe541104fbc2694300ec3233

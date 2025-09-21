@@ -17,15 +17,15 @@ var spawn_time_decrease_rate: float = 0.05 # How much spawn time decreases per r
 # Now using AssetPaths for textures
 var ENEMY_TYPES = {
 	"warrior": {
-		"behavior": "chase", "texture": load(AssetPaths.ENEMY_WARRIOR_TEXTURE),
+		"behavior": "chase", "texture": load("res://sprites/2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/skeleton1/v2/skeleton_v2_2.png"),
 		"base_health": 100.0, "base_speed": 100.0, "base_damage": 10.0, "xp_reward": 10
 	},
 	"orc": {
-		"behavior": "chase", "texture": load(AssetPaths.ENEMY_ORC_TEXTURE),
+		"behavior": "chase", "texture": load("res://sprites/2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/skull/v2/skull_v2_3.png"),
 		"base_health": 150.0, "base_speed": 80.0, "base_damage": 15.0, "xp_reward": 15
 	},
 	"mage": {
-		"behavior": "ranged", "texture": load(AssetPaths.ENEMY_MAGE_TEXTURE),
+		"behavior": "ranged", "texture": load("res://sprites/2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/vampire/v2/vampire_v2_3.png"),
 		"base_health": 60.0, "base_speed": 70.0, "base_damage": 20.0, "xp_reward": 20,
 		"attack_cooldown": 3.0, "preferred_distance": 250.0
 	}

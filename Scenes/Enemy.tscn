@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dkuhwwc41ups8"]
+[gd_scene load_steps=4 format=3 uid="uid://dkuhwwc41ups8"]
 
 [ext_resource type="Script" uid="uid://5r0qvhscbtnc" path="res://Scripts/enemy.gd" id="1_tt7e2"]
+[ext_resource type="Texture2D" uid="uid://cpxixmntsmawf" path="res://sprites/2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/skeleton1/v2/skeleton_v2_4.png" id="5_uoxpr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gqquq"]
 radius = 14.3178
@@ -15,6 +16,7 @@ script = ExtResource("1_tt7e2")
 shape = SubResource("CircleShape2D_gqquq")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("5_uoxpr")
 
 [node name="AttackTimer" type="Timer" parent="."]
 wait_time = 0.5
