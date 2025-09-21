@@ -437,8 +437,6 @@ autoplay = "Idle_Down"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_6hs50")
 
-[node name="ChargeTimer" type="Timer" parent="."]
-
 [node name="WeaponHolder" type="Node2D" parent="."]
 script = ExtResource("4_v7dgu")
 

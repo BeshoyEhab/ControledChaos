@@ -5,16 +5,16 @@ var owner_character: CharacterBody2D
 
 @onready var sprite: Sprite2D = $Sprite2D
 
-func order_attack(attack_type: String):
+func order_attack():
 	if not is_instance_valid(owner_character) or weapon_data.is_empty(): return
 	var attack_mode = weapon_data.get("attack_mode", "projectile")
 	match attack_mode:
 		"projectile", "lobbed":
-			owner_character.execute_projectile_attack(weapon_data, attack_type)
+			owner_character.execute_projectile_attack(weapon_data)
 		"melee":
-			owner_character.execute_melee_attack(weapon_data, attack_type)
+			owner_character.execute_melee_attack(weapon_data)
 		"hitscan":
-			owner_character.execute_hitscan_attack(weapon_data, attack_type)
+			owner_character.execute_hitscan_attack(weapon_data)
 
 func set_appearance(texture_path: String):
 	if sprite:
@@ -30,6 +30,6 @@ func set_appearance(texture_path: String):
 				var color_rect = ColorRect.new()
 				color_rect.name = "ColorRectFallback"
 				color_rect.color = Color("red") # Default fallback color for weapons
-				color_rect.size = Vector2(32, 32) # Default size, adjust as needed
+				color_rect.size = Vector2(16, 16) # Default size, adjust as needed
 				color_rect.pivot_offset = color_rect.size / 2 # Center pivot
 				sprite.add_child(color_rect)

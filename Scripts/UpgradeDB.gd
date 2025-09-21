@@ -30,7 +30,7 @@ var UPGRADES = {
 }
 
 # --- Helper function to get random cards ---
-func get_random_cards(count: int) -> Array[Dictionary]:
+func get_random_cards(count: int) -> Array:
 	var drawn_cards = []
 	var card_pool = []
 	for key in UPGRADES:
