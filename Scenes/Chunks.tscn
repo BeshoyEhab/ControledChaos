@@ -4530,7 +4530,7 @@ tile_set = SubResource("TileSet_r5w4q")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -30
 follow_viewport_enabled = true
-follow_viewport_scale = 234.009
+follow_viewport_scale = 1000.0
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = -1
@@ -4540,4 +4540,6 @@ offset_left = -2285.9546
 offset_top = -1519.98
 offset_right = 2304.7253
 offset_bottom = 1322.8401
+size_flags_horizontal = 3
+size_flags_vertical = 3
 color = Color(0.145098, 0.0745098, 0.101961, 1)
