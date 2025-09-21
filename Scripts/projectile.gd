@@ -14,8 +14,10 @@ var start_position: Vector2
 var max_penetrations: int = 0  # How many enemies can this projectile hit
 var enemies_hit: int = 0  # Counter for enemies hit
 var hit_enemies: Array = []  # Track which enemies we've already hit
+var type: String
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var anim_player: AnimatedSprite2D = %forPlayer
+@onready var anim_enemy: AnimatedSprite2D = %forEnemy
 @onready var timer: Timer = $Timer
 
 func _ready():
@@ -38,13 +40,23 @@ func _ready():
 		add_child(fallback_timer)
 		fallback_timer.start()
 
+	if is_in_group("player_projectiles"):
+		anim_player.visible = true
+		anim_player.global_position = global_position
+		anim_player.rotation = rotation
+		anim_player.play(type)
+	elif is_in_group("enemy_projectiles"):
+		anim_enemy.visible = true
+		anim_enemy.global_position = global_position
+		anim_enemy.rotation = rotation
+		anim_enemy.play(type)
+
 func _physics_process(delta: float):
 	# Apply gravity
 	velocity.y += gravity * delta
 	
 	# Rotate with velocity if enabled
-	if rotate_with_velocity and velocity.length() > 0:
-		rotation = velocity.angle()
+	rotation = velocity.angle()
 	
 	# Track travel distance for range-limited projectiles
 	var old_position = global_position
@@ -73,6 +85,10 @@ func _physics_process(delta: float):
 	
 	# Update travel distance
 	travel_distance += motion.length()
+	if is_in_group("player_projectiles"):
+		anim_player.global_position = global_position
+	elif is_in_group("enemy_projectiles"):
+		anim_enemy.global_position = global_position
 	
 	# Check if projectile has exceeded max range
 	if max_range > 0 and travel_distance >= max_range:
@@ -140,17 +156,9 @@ func _handle_penetration_collision(collider):
 		queue_free()
 
 func set_texture(texture_path: String):
-	if not sprite:
-		print("Warning: Sprite2D node not found in projectile")
-		return
-		
 	if texture_path != "":
 		var loaded_texture = load(texture_path)
 		if loaded_texture:
-			sprite.texture = loaded_texture
-			# Remove fallback if texture is loaded
-			if sprite.has_node("ColorRectFallback"):
-				sprite.get_node("ColorRectFallback").queue_free()
 			print("Loaded projectile texture: ", texture_path)
 		else:
 			print("Warning: Could not load projectile texture: ", texture_path)
@@ -160,16 +168,6 @@ func set_texture(texture_path: String):
 
 func _create_fallback_visual():
 	"""Create a simple colored rectangle if texture fails to load."""
-	if not sprite:
-		return
-		
-	# Clear any existing texture
-	sprite.texture = null
-	
-	# Remove existing fallback if any
-	if sprite.has_node("ColorRectFallback"):
-		sprite.get_node("ColorRectFallback").queue_free()
-	
 	# Create new fallback visual
 	var color_rect = ColorRect.new()
 	color_rect.name = "ColorRectFallback"
@@ -184,7 +182,6 @@ func _create_fallback_visual():
 	
 	color_rect.size = Vector2(8, 8)
 	color_rect.pivot_offset = color_rect.size / 2
-	sprite.add_child(color_rect)
 	print("Created fallback projectile visual")
 
 func handle_collision(collision: KinematicCollision2D):

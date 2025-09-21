@@ -235,6 +235,8 @@ func perform_ranged_attack():
 	
 	p.initial_velocity = direction * projectile_speed
 	p.global_position = global_position
+	p.rotation = direction.angle()
+	p.type = "enemy"
 	
 	# Safe texture loading for enemy projectiles
 	_setup_enemy_projectile_visual(p)

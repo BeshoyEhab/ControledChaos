@@ -50,19 +50,10 @@ const INVULN_BLINK_SPEED: float = 0.1
 
 # --- Weapon Database (same as before) ---
 var WEAPONS: Dictionary = {
-	&"sword": {
-		"attack_mode": "melee", "texture_path": AssetPaths.WEAPON_SWORD_ICON,
-		"cooldown": 0.5, "damage": 250,
-		"player_attack_cooldown": 1.0,
-		"player_projectile_count": 0,
-		"player_projectile_speed": 1.0,
-		"player_bounce_chance": 0.0,
-		"player_damage": 1.0,
-	},
 	&"pistol": {
-		"attack_mode": "projectile", "texture_path": AssetPaths.WEAPON_PISTOL_ICON,
-		"projectile_texture_path": AssetPaths.PROJECTILE_BULLET, "collision_behavior": "disappear",
-		"rotate_with_velocity": true, "cooldown": 0.3, "damage": 300, "speed": 800,
+		"attack_mode": "projectile", "weapon": "pistol",
+		"projectile": "enemy", "collision_behavior": "disappear",
+		"rotate_with_velocity": true, "cooldown": 0.25, "damage": 300, "speed": 800,
 		"player_attack_cooldown": 1.0,
 		"player_projectile_count": 0,
 		"player_projectile_speed": 1.0,
@@ -70,9 +61,9 @@ var WEAPONS: Dictionary = {
 		"player_damage": 1.0,
 	},
 	&"shotgun": {
-		"attack_mode": "projectile", "texture_path": AssetPaths.WEAPON_SHOTGUN_ICON,
-		"projectile_texture_path": AssetPaths.PROJECTILE_PELLET, "collision_behavior": "penetrate",
-		"rotate_with_velocity": false, "cooldown": 1.0, "damage": 150, "speed": 400,
+		"attack_mode": "projectile", "weapon": "shotgun",
+		"projectile": "Bullet", "collision_behavior": "penetrate",
+		"rotate_with_velocity": false, "cooldown": 1.2, "damage": 150, "speed": 400,
 		"spread_angle": 4.3, "burst_count": 8, "burst_delay": 0.0, "max_range": 50,
 		"scale": 5.0, "max_penetrations": 10,
 		"player_attack_cooldown": 1.0,
@@ -82,8 +73,8 @@ var WEAPONS: Dictionary = {
 		"player_damage": 1.0,
 	},
 	&"machine_gun": {
-		"attack_mode": "projectile", "texture_path": AssetPaths.WEAPON_MACHINE_GUN_ICON,
-		"projectile_texture_path": AssetPaths.PROJECTILE_BULLET, "collision_behavior": "disappear",
+		"attack_mode": "projectile", "weapon": "machine_gun",
+		"projectile": "Arrow", "collision_behavior": "disappear",
 		"rotate_with_velocity": true, "cooldown": 0.05, "damage": 50, "speed": 1200,
 		"burst_count": 1, "burst_delay": 0.08,
 		"player_attack_cooldown": 1.0,
@@ -93,8 +84,8 @@ var WEAPONS: Dictionary = {
 		"player_damage": 1.0,
 	},
 	&"fire_magic": {
-		"attack_mode": "projectile", "texture_path": AssetPaths.WEAPON_FIRE_MAGIC_ICON,
-		"projectile_texture_path": AssetPaths.PROJECTILE_FIREBALL, "collision_behavior": "disappear",
+		"attack_mode": "projectile", "weapon": "staff",
+		"projectile": "Magic", "collision_behavior": "disappear",
 		"rotate_with_velocity": true, "cooldown": 0.5, "damage": 300, "speed": 600,
 		"player_attack_cooldown": 1.0,
 		"player_projectile_count": 0,
@@ -426,6 +417,8 @@ func execute_projectile_attack(data: Dictionary):
 		p.initial_velocity = Vector2.RIGHT.rotated(current_angle) * final_speed
 		p.scale = Vector2.ONE * scale
 		p.global_position = weapon_holder.global_position
+		p.rotation = current_angle
+		p.type = data["projectile"]
 		
 		# Add to player_projectiles group for friendly fire prevention
 		p.add_to_group("player_projectiles")

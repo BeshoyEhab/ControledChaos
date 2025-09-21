@@ -303,37 +303,35 @@ animations = [{
 }]
 
 [node name="Projectile" type="CharacterBody2D"]
+z_index = 50
 collision_layer = 16
 script = ExtResource("1_lal66")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -5.0
-offset_top = -5.0
-offset_right = 5.0
-offset_bottom = 5.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_lal66")
 
-[node name="Timer" type="Timer" parent="."]
-one_shot = true
-
-[node name="forPlayer" type="AnimatedSprite2D" parent="."]
+[node name="forPlayer" type="AnimatedSprite2D" parent="CollisionShape2D"]
+unique_name_in_owner = true
+visible = false
+show_behind_parent = true
+top_level = true
+z_index = 50
 position = Vector2(0, 1.1920929e-07)
 scale = Vector2(0.59668714, 0.6153525)
 sprite_frames = SubResource("SpriteFrames_dsm84")
 animation = &"enemy"
 
-[node name="forEnemy" type="AnimatedSprite2D" parent="."]
+[node name="forEnemy" type="AnimatedSprite2D" parent="CollisionShape2D"]
+unique_name_in_owner = true
+visible = false
 modulate = Color(0, 0.5309929, 0.4513024, 1)
+show_behind_parent = true
+top_level = true
+z_index = 50
 position = Vector2(0, 1.1920929e-07)
 scale = Vector2(0.59668714, 0.6153525)
 sprite_frames = SubResource("SpriteFrames_dsm84")
 animation = &"Arrow"
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
