@@ -23,7 +23,6 @@ var current_weapon_node: Node2D
 
 # --- Node References ---
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var charge_timer: Timer = $ChargeTimer
 @onready var weapon_holder: Node2D = $WeaponHolder
 @onready var melee_area: Area2D = $WeaponHolder/MeleeArea
 @onready var hitscan_ray: RayCast2D = $WeaponHolder/HitscanRay
@@ -33,85 +32,65 @@ var current_weapon_node: Node2D
 @export var projectile_scene: PackedScene
 @export var weapon_scene: PackedScene
 @export var weapon_orbit_radius: float = 60.0
-@export var current_weapon_name: StringName = &"pistol"
+@export var current_weapon_name: StringName = &"shotgun"
 
 # --- Weapon Database ---
 var WEAPONS: Dictionary = {
 	&"sword": {
 		"attack_mode": "melee", "texture_path": AssetPaths.WEAPON_SWORD_ICON,
-		"cooldown": 0.5, "light_damage": 25, "heavy_damage": 60, "charge_time": 0.8,
+		"cooldown": 0.5, "damage": 250,
 		"player_attack_cooldown": 1.0, # Default multiplier
 		"player_projectile_count": 0, # Default
 		"player_projectile_speed": 1.0, # Default
 		"player_bounce_chance": 0.0, # Default
-		"player_light_damage": 1.0, # Default
-		"player_heavy_damage": 1.0, # Default
+		"player_damage": 1.0, # Default
 	},
 	&"pistol": {
 		"attack_mode": "projectile", "texture_path": AssetPaths.WEAPON_PISTOL_ICON,
 		"projectile_texture_path": AssetPaths.PROJECTILE_BULLET, "collision_behavior": "disappear",
-		"rotate_with_velocity": true, "cooldown": 0.4, "light_damage": 20, "light_speed": 800,
-		"heavy_damage": 70, "charge_time": 1.0,
+		"rotate_with_velocity": true, "cooldown": 0.4, "damage": 200, "speed": 800,
 		"player_attack_cooldown": 1.0,
 		"player_projectile_count": 0,
 		"player_projectile_speed": 1.0,
 		"player_bounce_chance": 0.0,
-		"player_light_damage": 1.0,
-		"player_heavy_damage": 1.0,
+		"player_damage": 1.0,
 	},
 	&"shotgun": {
 		"attack_mode": "projectile", "texture_path": AssetPaths.WEAPON_SHOTGUN_ICON,
 		"projectile_texture_path": AssetPaths.PROJECTILE_PELLET, "collision_behavior": "disappear",
-		"rotate_with_velocity": false, "cooldown": 1.0, "light_damage": 8, "light_speed": 1000,
+		"rotate_with_velocity": false, "cooldown": 1.0, "damage": 80, "speed": 1000,
 		"spread_angle": 15, "burst_count": 5, "burst_delay": 0.05,
 		"player_attack_cooldown": 1.0,
 		"player_projectile_count": 0,
 		"player_projectile_speed": 1.0,
 		"player_bounce_chance": 0.0,
-		"player_light_damage": 1.0,
-		"player_heavy_damage": 1.0,
+		"player_damage": 1.0,
 	},
 	&"machine_gun": {
 		"attack_mode": "projectile", "texture_path": AssetPaths.WEAPON_MACHINE_GUN_ICON,
 		"projectile_texture_path": AssetPaths.PROJECTILE_BULLET, "collision_behavior": "disappear",
-		"rotate_with_velocity": true, "cooldown": 0.8, "light_damage": 12, "light_speed": 1200,
+		"rotate_with_velocity": true, "cooldown": 0.8, "damage": 120, "speed": 1200,
 		"burst_count": 3, "burst_delay": 0.08,
 		"player_attack_cooldown": 1.0,
 		"player_projectile_count": 0,
 		"player_projectile_speed": 1.0,
 		"player_bounce_chance": 0.0,
-		"player_light_damage": 1.0,
-		"player_heavy_damage": 1.0,
+		"player_damage": 1.0,
 	},
 	&"fire_magic": {
 		"attack_mode": "projectile", "texture_path": AssetPaths.WEAPON_FIRE_MAGIC_ICON,
 		"projectile_texture_path": AssetPaths.PROJECTILE_FIREBALL, "collision_behavior": "disappear",
-		"rotate_with_velocity": true, "cooldown": 0.5, "light_damage": 30, "light_speed": 600,
-		"heavy_damage": 65, "heavy_speed": 600, "heavy_scale": 2.5, "charge_time": 1.2,
+		"rotate_with_velocity": true, "cooldown": 0.5, "damage": 300, "speed": 600,
 		"player_attack_cooldown": 1.0,
 		"player_projectile_count": 0,
 		"player_projectile_speed": 1.0,
 		"player_bounce_chance": 0.0,
-		"player_light_damage": 1.0,
-		"player_heavy_damage": 1.0,
-	},
-	&"grenade": {
-		"attack_mode": "lobbed", "texture_path": AssetPaths.WEAPON_GRENADE_ICON,
-		"projectile_texture_path": AssetPaths.PROJECTILE_GRENADE, "collision_behavior": "disappear",
-		"rotate_with_velocity": false, "cooldown": 1.5, "light_damage": 50, "light_speed": 400,
-		"gravity": 980, "heavy_damage": 100, "charge_time": 1.5,
-		"player_attack_cooldown": 1.0,
-		"player_projectile_count": 0,
-		"player_projectile_speed": 1.0,
-		"player_bounce_chance": 0.0,
-		"player_light_damage": 1.0,
-		"player_heavy_damage": 1.0,
+		"player_damage": 1.0,
 	},
 }
 
 func _ready():
 	add_to_group("player")
-	charge_timer.timeout.connect(_on_charge_timer_timeout)
 	StatsManager.stats_updated.connect(update_stats_from_manager)
 	update_stats_from_manager()
 	current_health = max_health
@@ -156,9 +135,7 @@ func on_enemy_killed():
 # --- Input, Movement, Weapon Rotation ---
 func handle_input():
 	if not can_attack: return
-	if Input.is_action_just_pressed("light_attack"): order_attack("light")
-	if Input.is_action_just_pressed("heavy_attack"): start_charge()
-	if Input.is_action_just_released("heavy_attack"): release_charge()
+	if Input.is_action_just_pressed("attack"): order_attack()
 	# Example of switching weapon randomly for testing
 	if Input.is_action_just_pressed("switch_weapon"): switch_weapon(WEAPONS.keys().pick_random())
 
@@ -183,16 +160,15 @@ func switch_weapon(weapon_name: StringName):
 	var weapon_data = WEAPONS[weapon_name]
 	current_weapon_node.owner_character = self
 	current_weapon_node.weapon_data = weapon_data
-	var weapon_texture = load(weapon_data["texture_path"])
-	current_weapon_node.set_appearance(weapon_texture)
+	current_weapon_node.set_appearance(weapon_data["texture_path"])
 	current_weapon_node.position.x = weapon_orbit_radius
 	weapon_holder.add_child(current_weapon_node)
 	current_weapon_name = weapon_name
 
-func order_attack(attack_type: String):
+func order_attack():
 	if not is_instance_valid(current_weapon_node): return
 	var weapon_data = current_weapon_node.weapon_data
-	if not weapon_data.has(attack_type + "_damage"): return
+	if not weapon_data.has("damage"): return
 	
 	# Apply weapon-specific cooldown multiplier from StatsManager
 	var weapon_cooldown_multiplier = StatsManager.get_final_value(1.0, StatsManager.stats.player_cooldown, true)
@@ -203,24 +179,24 @@ func order_attack(attack_type: String):
 		var burst_count = weapon_data.get("burst_count", 1)
 		var burst_delay = weapon_data.get("burst_delay", 0.0)
 		for i in range(burst_count):
-			execute_projectile_attack(weapon_data, attack_type)
+			execute_projectile_attack(weapon_data)
 			if burst_delay > 0 and i < burst_count - 1:
 				await get_tree().create_timer(burst_delay).timeout
 	else:
 		# For melee/hitscan, just execute once
 		match weapon_data.attack_mode:
-			"melee": execute_melee_attack(weapon_data, attack_type)
-			"hitscan": execute_hitscan_attack(weapon_data, attack_type)
+			"melee": execute_melee_attack(weapon_data)
+			"hitscan": execute_hitscan_attack(weapon_data)
 
 	can_attack = false
 	await get_tree().create_timer(final_cooldown).timeout
 	can_attack = true
 
-func execute_projectile_attack(data: Dictionary, type: String):
+func execute_projectile_attack(data: Dictionary):
 	if projectile_scene == null: return
-	var base_damage = data[type + "_damage"]
-	var base_speed = data[type + "_speed"]
-	var scale = data.get(type + "_scale", 1.0)
+	var base_damage = data["damage"]
+	var base_speed = data["speed"]
+	var scale = data.get("scale", 1.0)
 	var spread_angle_deg = data.get("spread_angle", 0)
 
 	# Get stat multipliers from StatsManager
@@ -248,7 +224,7 @@ func execute_projectile_attack(data: Dictionary, type: String):
 			p.bounces_left = 1 # Or more, if you want upgrades for multiple bounces
 		
 		if data.has("projectile_texture_path"):
-			p.set_texture(load(data["projectile_texture_path"]))
+			p.set_texture(data["projectile_texture_path"])
 		
 		var current_angle = start_angle + (angle_step * j)
 		
@@ -264,9 +240,9 @@ func execute_projectile_attack(data: Dictionary, type: String):
 		p.set_collision_mask_value(1, false)
 		get_tree().get_root().add_child(p)
 
-func execute_melee_attack(data: Dictionary, type: String):
+func execute_melee_attack(data: Dictionary):
 	var damage_multiplier = StatsManager.get_final_value(1.0, StatsManager.stats.player_damage)
-	var damage = data[type + "_damage"] * damage_multiplier
+	var damage = data["damage"] * damage_multiplier
 	melee_area.monitoring = true
 	for body in melee_area.get_overlapping_bodies():
 		if body.is_in_group("enemies") and body.has_method("take_damage"):
@@ -274,30 +250,14 @@ func execute_melee_attack(data: Dictionary, type: String):
 	await get_tree().create_timer(0.1).timeout
 	melee_area.monitoring = false
 
-func execute_hitscan_attack(data: Dictionary, type: String):
+func execute_hitscan_attack(data: Dictionary):
 	hitscan_ray.force_raycast_update()
 	if hitscan_ray.is_colliding():
 		var collider = hitscan_ray.get_collider()
 		if collider.is_in_group("enemies") and collider.has_method("take_damage"):
 			var damage_multiplier = StatsManager.get_final_value(1.0, StatsManager.stats.player_damage)
-			var damage = data[type + "_damage"] * damage_multiplier
+			var damage = data["damage"] * damage_multiplier
 			collider.take_damage(damage)
-
-# --- Charging Logic ---
-func start_charge():
-	if not is_instance_valid(current_weapon_node): return
-	var weapon_data = current_weapon_node.weapon_data
-	if not weapon_data.has("heavy_damage"): return
-	is_charging = true
-	is_fully_charged = false
-	charge_timer.start(weapon_data["charge_time"])
-
-func release_charge():
-	if not is_charging: return
-	if is_fully_charged: order_attack("heavy")
-	is_charging = false
-	is_fully_charged = false
-	charge_timer.stop()
 
 func _on_charge_timer_timeout():
 	if is_charging: is_fully_charged = true

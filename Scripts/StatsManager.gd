@@ -54,15 +54,15 @@ func _ready():
 
 func add_xp(amount: int):
 	current_xp += amount
-	player_xp_updated.emit(current_xp, xp_to_next_level, current_level)
 	while current_xp >= xp_to_next_level:
 		level_up()
+	player_xp_updated.emit(current_xp, xp_to_next_level, current_level)
 
 func level_up():
+	print(current_xp, xp_to_next_level, current_level)
 	current_level += 1
 	current_xp -= xp_to_next_level
 	xp_to_next_level = int(xp_to_next_level * 1.5)
-	player_xp_updated.emit(current_xp, xp_to_next_level)
 	
 	if current_level % 10 == 0:
 		show_merge_screen.emit(owned_upgrades)
@@ -70,7 +70,6 @@ func level_up():
 	
 	var card_options = UpgradeDB.get_random_cards(3)
 	player_leveled_up.emit(current_level, card_options)
-	player_xp_updated.emit(current_xp, xp_to_next_level, current_level)
 
 func apply_upgrade(card_key: String):
 	if not UpgradeDB.UPGRADES.has(card_key): return
