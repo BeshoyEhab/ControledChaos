@@ -1,7 +1,7 @@
 [gd_scene load_steps=29 format=3 uid="uid://v728htw826cf"]
 
 [ext_resource type="Texture2D" uid="uid://bnodh4r6a5em8" path="res://sprites/free_rotating_key_frakassets/key_32x32_24f.png" id="1_161lg"]
-[ext_resource type="Script" uid="uid://b77gerpduxdj7" path="res://Scenes/gate_key.gd" id="1_cuxmk"]
+[ext_resource type="Script" uid="uid://b77gerpduxdj7" path="res://Scripts/gate_key.gd" id="1_cuxmk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cuxmk"]
 size = Vector2(9, 8)

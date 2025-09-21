@@ -23,6 +23,8 @@ var current_weapon_node: Node2D
 
 var collected_keys: Array[String] = []
 
+signal player_died
+
 # --- Node References ---
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var weapon_holder: Node2D = $WeaponHolder
@@ -123,7 +125,8 @@ func take_damage(amount: float):
 	current_health -= amount
 	StatsManager.player_health_updated.emit(current_health, max_health)
 	if current_health <= 0:
-		get_tree().reload_current_scene() # Simple game over for now
+		player_died.emit()
+		queue_free() # Simple game over for now
 
 func heal(amount: float):
 	current_health = min(current_health + amount, max_health)

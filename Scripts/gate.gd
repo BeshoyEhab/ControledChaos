@@ -1,7 +1,7 @@
 extends Area2D
 
 @export var required_key_id: String = "dimension_key" # المفتاح المطلوب لفتح هذه البوابة
-@export var target_player_position: Vector2 = Vector2(142,-1258) # الموقع الجديد للاعب عند الانتقال
+@export var target_player_position: Vector2 = Vector2(155,-1255) # الموقع الجديد للاعب عند الانتقال
 
 # لا نحتاج لـ signal gate_activated بعد الآن إذا كانت البوابة تنقل اللاعب مباشرة
 # لا نحتاج لـ sprite, closed_texture, open_texture إذا كانت البوابة مجرد شكل ثابت

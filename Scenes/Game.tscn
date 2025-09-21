@@ -1,15 +1,21 @@
-[gd_scene load_steps=11 format=3 uid="uid://ihcdby0lvaxw"]
+[gd_scene load_steps=13 format=3 uid="uid://ihcdby0lvaxw"]
 
 [ext_resource type="PackedScene" uid="uid://demh1bcusr7k" path="res://Scenes/Chunks.tscn" id="1_gl6un"]
 [ext_resource type="PackedScene" uid="uid://caekygdtxf1fu" path="res://Scenes/Character.tscn" id="1_iukft"]
 [ext_resource type="PackedScene" uid="uid://cpop36rlb46lx" path="res://Scenes/LevelUpUI.tscn" id="3_j5yw3"]
 [ext_resource type="Script" uid="uid://qohd8x3s1umo" path="res://Scripts/GameUI.gd" id="3_kldst"]
 [ext_resource type="Script" uid="uid://d3demqa2op6qd" path="res://Scripts/EnemySpawner.gd" id="5_b2bpf"]
-[ext_resource type="Script" uid="uid://cvci1kh858m1c" path="res://Scripts/player_hb.gd" id="6_2irst"]
+[ext_resource type="Script" path="res://Scripts/player_hb.gd" id="6_2irst"]
 [ext_resource type="PackedScene" uid="uid://dkuhwwc41ups8" path="res://Scenes/Enemy.tscn" id="6_7lihs"]
-[ext_resource type="Script" uid="uid://bk4ofy55hqj7n" path="res://Scripts/player_xp.gd" id="7_bf53h"]
+[ext_resource type="Script" path="res://Scripts/player_xp.gd" id="7_bf53h"]
 [ext_resource type="PackedScene" uid="uid://c4q4hl0afd4ce" path="res://Scenes/Card.tscn" id="7_fgofq"]
-[ext_resource type="Script" uid="uid://c504pqmytj8y3" path="res://Scripts/game_timer.gd" id="10_71axn"]
+[ext_resource type="Script" path="res://Scripts/game_timer.gd" id="10_71axn"]
+[ext_resource type="FontFile" uid="uid://ca313xqdvxrpm" path="res://sprites/antiquity-print.ttf" id="11_dahhg"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3so38"]
+font = ExtResource("11_dahhg")
+font_size = 11
+font_color = Color(0.89182436, 0.63201815, 0.1442304, 1)
 
 [node name="Game" type="Node2D"]
 
@@ -66,3 +72,13 @@ enemy_scene = ExtResource("6_7lihs")
 [node name="Timer" type="Timer" parent="EnemySpawner"]
 wait_time = 1.663
 autostart = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = -57.0
+offset_top = 557.0
+offset_right = 119.0
+offset_bottom = 594.0
+text = "You need to find the key and go to the gate"
+label_settings = SubResource("LabelSettings_3so38")
+horizontal_alignment = 1
+autowrap_mode = 2

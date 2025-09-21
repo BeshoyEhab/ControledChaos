@@ -1,7 +1,7 @@
 [gd_scene load_steps=40 format=4 uid="uid://demh1bcusr7k"]
 
 [ext_resource type="Texture2D" uid="uid://daxeimk84xtys" path="res://sprites/2D Pixel Dungeon Asset Pack/character and tileset/Dungeon_Tileset.png" id="1_8g5ld"]
-[ext_resource type="Script" uid="uid://20e6ysmy0b6m" path="res://Scenes/chunks.gd" id="1_gha4g"]
+[ext_resource type="Script" uid="uid://20e6ysmy0b6m" path="res://Scripts/chunks.gd" id="1_gha4g"]
 [ext_resource type="Texture2D" uid="uid://dhmbieol2fmdy" path="res://sprites/tilesets/Pixel Art Top Down - Basic v1.2.2/TX Tileset Grass.png" id="2_n4uxi"]
 [ext_resource type="Texture2D" uid="uid://cd2wra2d33ssr" path="res://sprites/tilesets/Pixel Art Top Down - Basic v1.2.2/TX Tileset Wall.png" id="4_amvfp"]
 [ext_resource type="Texture2D" uid="uid://2dnnjjk0usnr" path="res://sprites/tilesets/Pixel Art Top Down - Basic v1.2.2/TX Struct.png" id="5_2xo0e"]
