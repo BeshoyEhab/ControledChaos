@@ -417,7 +417,13 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_6hs50"]
 radius = 7.0
 
+<<<<<<< Updated upstream
 [node name="CharacterBody2D" type="CharacterBody2D"]
+=======
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdqda"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["player"]]
+>>>>>>> Stashed changes
 collision_mask = 4
 script = ExtResource("1_jo2ib")
 projectile_scene = ExtResource("2_677pu")

@@ -15,6 +15,20 @@ run/main_scene="uid://ihcdby0lvaxw"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
+<<<<<<< Updated upstream
+=======
+[autoload]
+
+StatsManager="*res://Scripts/StatsManager.gd"
+UpgradeDB="*res://Scripts/UpgradeDB.gd"
+AssetPaths="*res://Scripts/AssetPaths.gd"
+
+[global_group]
+
+player=""
+gates=""
+
+>>>>>>> Stashed changes
 [input]
 
 ui_up={

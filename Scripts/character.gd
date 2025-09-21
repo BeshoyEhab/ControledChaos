@@ -16,6 +16,24 @@ enum Direction { DOWN, UP, RIGHT, LEFT }
 @export_group("Movement")
 @export var speed: float = 200.0
 
+<<<<<<< Updated upstream
+=======
+# --- Attack State ---
+var is_charging: bool = false
+var is_fully_charged: bool = false
+var can_attack: bool = true
+var current_weapon_node: Node2D
+
+var collected_keys: Array[String] = []
+
+# --- Node References ---
+@onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var weapon_holder: Node2D = $WeaponHolder
+@onready var melee_area: Area2D = $WeaponHolder/MeleeArea
+@onready var hitscan_ray: RayCast2D = $WeaponHolder/HitscanRay
+
+# --- Exported Variables ---
+>>>>>>> Stashed changes
 @export_group("Weapons")
 @export var projectile_scene: PackedScene
 # استخدام enum للسلاح الحالي يمنع الأخطاء الإملائية
@@ -175,4 +193,32 @@ func update_animation(direction: Vector2) -> void:
 				anim_sprite.play("Idle_Right")
 			Direction.LEFT:
 				anim_sprite.flip_h = true
+<<<<<<< Updated upstream
 				anim_sprite.play("Idle_Right") # إعادة استخدام نفس الحركة
+=======
+				anim_sprite.play("Idle_Right") # Use the same animation, just flipped
+
+
+
+
+func add_key(key_id: String): # <--- هذه هي الدالة التي يجب أن تكون موجودة
+	if not collected_keys.has(key_id):
+		collected_keys.append(key_id)
+		print("Player collected key: ", key_id)
+
+func has_key(key_id: String) -> bool:
+	return collected_keys.has(key_id)
+
+func can_unlock_gate(required_key_id: String) -> bool:
+	return has_key(required_key_id)
+
+func _on_key_collected(key_id_value: String):
+	add_key(key_id_value)
+	add_key(key_id_value)
+	print("Player now has keys: ", collected_keys)
+
+
+#func _on_key_collected(key_id_value: String):
+	#add_key(key_id_value)
+	#print("Player now has keys: ", collected_keys)
+>>>>>>> Stashed changes
