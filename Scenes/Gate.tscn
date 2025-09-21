@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://duuylxcummoxf"]
+
+[ext_resource type="Script" uid="uid://csk3ju5yjipwp" path="res://Scenes/gate.gd" id="1_nrts1"]
+[ext_resource type="Texture2D" uid="uid://dq4xl3321f3ii" path="res://sprites/tilesets/Pixel Art Top Down - Basic v1.2.2/Extra/stage.png" id="2_qe3w3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bcbuj"]
+
+[node name="Gate" type="Area2D"]
+script = ExtResource("1_nrts1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_bcbuj")
+
+[node name="Sprite2D" type="Sprite2D" parent="CollisionShape2D"]
+position = Vector2(0.99999905, -1)
+scale = Vector2(0.71276593, 0.7777778)
+texture = ExtResource("2_qe3w3")
