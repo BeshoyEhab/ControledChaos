@@ -495,4 +495,3 @@ func _on_key_collected(key_id_value: String):
 #func _on_key_collected(key_id_value: String):
 	#add_key(key_id_value)
 	#print("Player now has keys: ", collected_keys)
->>>>>>> d0151c78d9113f0abe541104fbc2694300ec3233

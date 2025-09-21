@@ -244,7 +244,7 @@ func handle_collision(collision: KinematicCollision2D):
 		# Hit something that can't take damage (wall, obstacle, etc.)
 		print("Hit obstacle: ", collider.name)
 		match collision_behavior:
-			"disappear", "penetrate": 
+			"disappear": 
 				print("Projectile hit wall, disappearing")
 				queue_free()
 			"bounce":
