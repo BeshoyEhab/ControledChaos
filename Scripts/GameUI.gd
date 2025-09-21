@@ -12,6 +12,9 @@ func _ready():
 	# Ensure bars are visible from the start
 	player_hb.max_hp = 100.0
 	player_hb.current_hp = 100.0
+	player_xp.current_level = 1
+	player_xp.current_xp = 0
+	player_xp.xp_to_next_level = 100
 	game_timer.set_max_time(1800)
 	game_timer.start_timer(false)
 
@@ -26,6 +29,6 @@ func _on_health_updated(current_health, max_health):
 	player_hb.current_hp = current_health
 
 func _on_xp_updated(current_xp, max_xp, level):
+	player_xp.set_level(level)
 	player_xp.xp_to_next_level = max_xp
 	player_xp.current_xp = current_xp
-	player_xp.set_level(level)

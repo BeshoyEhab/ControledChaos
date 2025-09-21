@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uuhha")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="BackgroundOverlay" type="ColorRect" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -28,8 +28,8 @@ layout_mode = 2
 [node name="HeaderLabel" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="CardContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+[node name="LevelInfoLabel" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="MergeGrid" type="GridContainer" parent="CenterContainer/VBoxContainer"]
+[node name="CardContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2

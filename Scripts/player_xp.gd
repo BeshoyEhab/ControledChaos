@@ -7,7 +7,6 @@ extends Control
 var current_xp: float = 0.0:
 	set(value):
 		current_xp = clamp(value, 0, xp_to_next_level)
-		check_level_up()
 		update_display()
 
 var xp_to_next_level: float = 100.0:
@@ -18,7 +17,6 @@ var xp_to_next_level: float = 100.0:
 var current_level: int = 1:
 	set(value):
 		current_level = value
-		calculate_xp_needed()
 		update_display()
 
 # XP scaling formula: base_xp * (level^1.5)
@@ -26,7 +24,6 @@ var base_xp_per_level: float = 100.0
 
 func _ready():
 	setup_ui()
-	calculate_xp_needed()
 	update_display()
 
 func setup_ui():
@@ -126,16 +123,6 @@ func update_display():
 		xp_bar.modulate = Color(1.2, 1.2, 1.0)  # Bright when close to level up
 	else:
 		xp_bar.modulate = Color.WHITE
-
-func calculate_xp_needed():
-	xp_to_next_level = base_xp_per_level * pow(current_level, 1.5)
-
-func check_level_up():
-	while current_xp >= xp_to_next_level:
-		current_xp -= xp_to_next_level
-		current_level += 1
-		# Could emit signal here for level up effects
-		print("Level up! Now level ", current_level)
 
 func gain_xp(amount: float):
 	current_xp = current_xp + amount

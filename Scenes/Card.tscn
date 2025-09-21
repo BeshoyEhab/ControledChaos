@@ -1,17 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://c4q4hl0afd4ce"]
+[gd_scene load_steps=3 format=3 uid="uid://c4q4hl0afd4ce"]
 
 [ext_resource type="Script" uid="uid://c2vlgxg2paa6i" path="res://Scripts/Card.gd" id="1_pnb5n"]
 
-[node name="PanelContainer" type="PanelContainer"]
+[sub_resource type="LabelSettings" id="LabelSettings_pnb5n"]
+
+[node name="CardUI" type="PanelContainer"]
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_pnb5n")
+
+[node name="RarityBorder" type="NinePatchRect" parent="."]
+layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+label_settings = SubResource("LabelSettings_pnb5n")
 horizontal_alignment = 1
 
 [node name="RarityLabel" type="Label" parent="VBoxContainer"]
@@ -24,3 +30,6 @@ layout_mode = 2
 [node name="SelectButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Select"
+
+[node name="CardIcon" type="TextureRect" parent="VBoxContainer"]
+layout_mode = 2

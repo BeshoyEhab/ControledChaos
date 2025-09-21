@@ -27,12 +27,12 @@ var stats = {
 var owned_upgrades = []
 
 # --- Game Balance Constants ---
-const PLAYER_STAT_LIMITS = Vector2(0.5, 4.0) # Min/Max multipliers
-const ENEMY_STAT_LIMITS = Vector2(1.0, 5.0) # Adjusted range for enemies
+const PLAYER_STAT_LIMITS = Vector2(1.0, 4.0) # Min/Max multipliers
+const ENEMY_STAT_LIMITS = Vector2(1.0, 4.0) # Adjusted range for enemies
 
 # --- XP and Leveling ---
 var current_xp: int = 0
-var xp_to_next_level: int = 10
+var xp_to_next_level: int = 100
 var current_level: int = 1
 
 func _ready():
@@ -57,9 +57,9 @@ func add_xp(amount: int):
 	while current_xp >= xp_to_next_level:
 		level_up()
 	player_xp_updated.emit(current_xp, xp_to_next_level, current_level)
+	print(current_xp, ", ", xp_to_next_level, ", ", current_level)
 
 func level_up():
-	print(current_xp, xp_to_next_level, current_level)
 	current_level += 1
 	current_xp -= xp_to_next_level
 	xp_to_next_level = int(xp_to_next_level * 1.5)

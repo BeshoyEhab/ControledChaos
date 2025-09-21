@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://ihcdby0lvaxw"]
+[gd_scene load_steps=13 format=3 uid="uid://ihcdby0lvaxw"]
 
 [ext_resource type="PackedScene" uid="uid://demh1bcusr7k" path="res://Scenes/Chunks.tscn" id="1_gl6un"]
 [ext_resource type="PackedScene" uid="uid://caekygdtxf1fu" path="res://Scenes/Character.tscn" id="1_iukft"]
+[ext_resource type="PackedScene" uid="uid://du2jxpg7ebkws" path="res://Scenes/Projectile.tscn" id="3_dahhg"]
 [ext_resource type="PackedScene" uid="uid://cpop36rlb46lx" path="res://Scenes/LevelUpUI.tscn" id="3_j5yw3"]
 [ext_resource type="Script" uid="uid://qohd8x3s1umo" path="res://Scripts/GameUI.gd" id="3_kldst"]
+[ext_resource type="PackedScene" uid="uid://duwqr38w7ub52" path="res://Scenes/Weapon.tscn" id="4_3so38"]
 [ext_resource type="Script" uid="uid://d3demqa2op6qd" path="res://Scripts/EnemySpawner.gd" id="5_b2bpf"]
 [ext_resource type="Script" uid="uid://cvci1kh858m1c" path="res://Scripts/player_hb.gd" id="6_2irst"]
 [ext_resource type="PackedScene" uid="uid://dkuhwwc41ups8" path="res://Scenes/Enemy.tscn" id="6_7lihs"]
@@ -16,6 +18,8 @@
 [node name="Map" parent="." instance=ExtResource("1_gl6un")]
 
 [node name="Character" parent="." instance=ExtResource("1_iukft")]
+projectile_scene = ExtResource("3_dahhg")
+weapon_scene = ExtResource("4_3so38")
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
 zoom = Vector2(2.5, 2.5)
@@ -45,10 +49,6 @@ offset_bottom = 40.0
 script = ExtResource("7_bf53h")
 
 [node name="LevelUpUI" parent="CanvasLayer" instance=ExtResource("3_j5yw3")]
-anchors_preset = -1
-offset_left = 536.0
-offset_right = -616.0
-offset_bottom = -648.0
 card_scene = ExtResource("7_fgofq")
 
 [node name="GameTimer" type="Control" parent="CanvasLayer"]
