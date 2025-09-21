@@ -17,6 +17,7 @@ var stats = {
 	"player_projectile_count": 0, # Start with 0, base is 1 in character
 	"player_lifesteal": 0.0,
 	"player_bounce_chance": 0.0,
+	"player_projectile_speed": 1.0,
 	
 	# Enemy Stats
 	"enemy_health": 1.0,
