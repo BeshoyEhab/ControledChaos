@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://du2jxpg7ebkws"]
+[gd_scene load_steps=44 format=3 uid="uid://du2jxpg7ebkws"]
 
 [ext_resource type="Script" uid="uid://dk4sxoqrxvwgm" path="res://Scripts/projectile.gd" id="1_lal66"]
 [ext_resource type="Texture2D" uid="uid://cpssow53jx7eu" path="res://sprites/wepons/All_Fire_Bullet_Pixel_16x16_00.png" id="2_k1cl8"]
@@ -122,6 +122,46 @@ region = Rect2(592, 0, 16, 16)
 atlas = ExtResource("2_k1cl8")
 region = Rect2(608, 0, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_04knh"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(0, 288, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovt40"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(16, 288, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2olq"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(32, 288, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oj5sc"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(48, 288, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1i4aw"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(64, 288, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arlqd"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(0, 304, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7mifc"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(16, 304, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7th0d"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(32, 304, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jn4f"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(48, 304, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jiu1q"]
+atlas = ExtResource("2_k1cl8")
+region = Rect2(64, 304, 16, 16)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_dsm84"]
 animations = [{
 "frames": [{
@@ -225,6 +265,41 @@ animations = [{
 "loop": true,
 "name": &"Magic",
 "speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_04knh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ovt40")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g2olq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oj5sc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1i4aw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arlqd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7mifc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7th0d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0jn4f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jiu1q")
+}],
+"loop": true,
+"name": &"enemy",
+"speed": 12.0
 }]
 
 [node name="Projectile" type="CharacterBody2D"]
@@ -250,9 +325,15 @@ shape = SubResource("CircleShape2D_lal66")
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(9.536743e-07, -1.1920929e-07)
+[node name="forPlayer" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 1.1920929e-07)
 scale = Vector2(0.59668714, 0.6153525)
 sprite_frames = SubResource("SpriteFrames_dsm84")
-animation = &"Magic"
-frame_progress = 0.027456649
+animation = &"enemy"
+
+[node name="forEnemy" type="AnimatedSprite2D" parent="."]
+modulate = Color(0, 0.5309929, 0.4513024, 1)
+position = Vector2(0, 1.1920929e-07)
+scale = Vector2(0.59668714, 0.6153525)
+sprite_frames = SubResource("SpriteFrames_dsm84")
+animation = &"Arrow"

@@ -1,8 +1,7 @@
-[gd_scene load_steps=57 format=3 uid="uid://duwqr38w7ub52"]
+[gd_scene load_steps=51 format=3 uid="uid://duwqr38w7ub52"]
 
 [ext_resource type="Script" uid="uid://cww2x6bqcaepu" path="res://Scripts/weapon.gd" id="1_2og4f"]
 [ext_resource type="Texture2D" uid="uid://c6586r1r6rhhu" path="res://sprites/wepons/[design]Shotgun_V1.02.png" id="2_p5ieq"]
-[ext_resource type="Texture2D" uid="uid://dwrhsla1v2gd6" path="res://sprites/wepons/Bow and Arrows.png" id="3_e6qew"]
 [ext_resource type="Texture2D" uid="uid://cpssow53jx7eu" path="res://sprites/wepons/All_Fire_Bullet_Pixel_16x16_00.png" id="4_jnpr5"]
 [ext_resource type="Texture2D" uid="uid://c5rouob3hjbgx" path="res://sprites/wepons/[design] Assault_rifle_V1.00.png" id="4_lx1ig"]
 [ext_resource type="Texture2D" uid="uid://cwcwneecna3dm" path="res://sprites/wepons/rifle.psd.png" id="5_ojw2p"]
@@ -14,7 +13,6 @@
 [ext_resource type="Texture2D" uid="uid://cplbbrllikos5" path="res://sprites/wepons/sword/Slash 1/Slash_color4_frame7.png" id="11_8vh7t"]
 [ext_resource type="Texture2D" uid="uid://dpepxo1xiib4q" path="res://sprites/wepons/GUN_01_[square_frame]_01_V1.00.png" id="11_w7e58"]
 [ext_resource type="Texture2D" uid="uid://dxenp26ot0by8" path="res://sprites/wepons/sword/Slash 1/Slash_color4_frame9.png" id="12_87yku"]
-[ext_resource type="Texture2D" uid="uid://boicbo3e8g0tu" path="res://sprites/wepons/Arrow.png" id="12_kj31y"]
 [ext_resource type="Texture2D" uid="uid://cnjfnna87sbei" path="res://sprites/wepons/sword/Slash 1/Slash_color4_frame8.png" id="13_kw35t"]
 [ext_resource type="Texture2D" uid="uid://c3slopji17fvs" path="res://sprites/wepons/sword/Slash 1/Slash_color4_frame1.png" id="14_vpwxg"]
 [ext_resource type="Texture2D" uid="uid://do480w03hklyi" path="res://sprites/wepons/sword/Slash 1/Slash_color4_frame2.png" id="15_2jpns"]
@@ -87,22 +85,6 @@ region = Rect2(304, 64, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_kfn5a"]
 atlas = ExtResource("4_jnpr5")
 region = Rect2(256, 64, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1ff0q"]
-atlas = ExtResource("3_e6qew")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ogbq8"]
-atlas = ExtResource("3_e6qew")
-region = Rect2(0, 16, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hcmtg"]
-atlas = ExtResource("3_e6qew")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jahdx"]
-atlas = ExtResource("3_e6qew")
-region = Rect2(16, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p75nc"]
 atlas = ExtResource("4_jnpr5")
@@ -206,23 +188,6 @@ animations = [{
 "loop": true,
 "name": &"Staff",
 "speed": 16.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1ff0q")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ogbq8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hcmtg")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jahdx")
-}],
-"loop": true,
-"name": &"bow",
-"speed": 11.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -336,7 +301,7 @@ scale = Vector2(0.22917177, 0.22050478)
 sprite_frames = SubResource("SpriteFrames_8f34j")
 animation = &"shotgun"
 autoplay = "shotgun"
-frame_progress = 0.7977443
+frame_progress = 0.6476311
 
 [node name="Rife" type="Sprite2D" parent="."]
 visible = false
@@ -351,7 +316,7 @@ scale = Vector2(0.22917177, 0.22050478)
 sprite_frames = SubResource("SpriteFrames_8f34j")
 animation = &"rifle"
 autoplay = "rifle"
-frame_progress = 0.5780016
+frame_progress = 0.4477701
 
 [node name="gun" type="Sprite2D" parent="."]
 visible = false
@@ -384,23 +349,7 @@ scale = Vector2(15.364036, 14.541346)
 sprite_frames = SubResource("SpriteFrames_8f34j")
 animation = &"Staff"
 autoplay = "Staff"
-frame_progress = 0.08292384
-
-[node name="bow" type="Sprite2D" parent="."]
-visible = false
-texture_filter = 1
-position = Vector2(4.9999986, 1.9073486e-06)
-scale = Vector2(1.776507, 2.1925344)
-texture = ExtResource("12_kj31y")
-
-[node name="bow" type="AnimatedSprite2D" parent="bow"]
-texture_filter = 1
-position = Vector2(-4.3757133, 5.9604645e-08)
-scale = Vector2(1.3780268, 1.2683719)
-sprite_frames = SubResource("SpriteFrames_8f34j")
-animation = &"bow"
-autoplay = "bow"
-frame_progress = 0.16843008
+frame_progress = 0.80258346
 
 [node name="Sword" type="Sprite2D" parent="."]
 visible = false
@@ -416,6 +365,6 @@ position = Vector2(16.947536, 4.824355)
 rotation = 0.4886922
 scale = Vector2(0.44513792, 0.5092191)
 sprite_frames = SubResource("SpriteFrames_8f34j")
-animation = &"sword"
+animation = &"Staff"
 autoplay = "sword"
-frame_progress = 0.76394683
+frame_progress = 0.18729384
