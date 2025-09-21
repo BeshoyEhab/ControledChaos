@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="New Game Project"
-run/main_scene="uid://ihcdby0lvaxw"
+run/main_scene="uid://djoardeej75yr"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -20,6 +20,15 @@ config/icon="res://icon.svg"
 StatsManager="*res://Scripts/StatsManager.gd"
 UpgradeDB="*res://Scripts/UpgradeDB.gd"
 AssetPaths="*res://Scripts/AssetPaths.gd"
+
+[display]
+
+window/size/mode=2
+
+[global_group]
+
+player=""
+gates=""
 
 [input]
 

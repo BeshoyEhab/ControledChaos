@@ -31,6 +31,10 @@ var is_fully_charged: bool = false
 var can_attack: bool = true
 var current_weapon_node: Node2D
 
+var collected_keys: Array[String] = []
+
+signal player_died
+
 # --- Node References ---
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var weapon_holder: Node2D = $WeaponHolder
@@ -468,3 +472,27 @@ func _create_fallback_weapon_visual(weapon_node: Node, texture_path: String):
 			image.fill(Color.GRAY)  # Gray rectangle for weapon
 			var fallback_texture = ImageTexture.create_from_image(image)
 			sprite.texture = fallback_texture
+
+
+
+func add_key(key_id: String): # <--- هذه هي الدالة التي يجب أن تكون موجودة
+	if not collected_keys.has(key_id):
+		collected_keys.append(key_id)
+		print("Player collected key: ", key_id)
+
+func has_key(key_id: String) -> bool:
+	return collected_keys.has(key_id)
+
+func can_unlock_gate(required_key_id: String) -> bool:
+	return has_key(required_key_id)
+
+func _on_key_collected(key_id_value: String):
+	add_key(key_id_value)
+	add_key(key_id_value)
+	print("Player now has keys: ", collected_keys)
+
+
+#func _on_key_collected(key_id_value: String):
+	#add_key(key_id_value)
+	#print("Player now has keys: ", collected_keys)
+>>>>>>> d0151c78d9113f0abe541104fbc2694300ec3233

@@ -1,0 +1,125 @@
+[gd_scene load_steps=8 format=3 uid="uid://djoardeej75yr"]
+
+[ext_resource type="FontFile" uid="uid://ca313xqdvxrpm" path="res://sprites/antiquity-print.ttf" id="1_erocy"]
+[ext_resource type="Script" uid="uid://fsdlhyw45j2m" path="res://Scripts/startmenue.gd" id="1_fvvxw"]
+[ext_resource type="Texture2D" uid="uid://r8ogv3ds6ugy" path="res://sprites/cover.png" id="2_fvvxw"]
+[ext_resource type="Texture2D" uid="uid://clke4um835lim" path="res://sprites/button.png" id="3_om8st"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_x1xlv"]
+font = ExtResource("1_erocy")
+font_size = 66
+font_color = Color(0.86717594, 0.55854964, 0.22788012, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_fvvxw"]
+font = ExtResource("1_erocy")
+font_size = 31
+font_color = Color(0.8666667, 0.5568628, 0.22745098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7m0q0"]
+font = ExtResource("1_erocy")
+font_size = 126
+
+[node name="Startmenue" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+scale = Vector2(1.3892112, 1.3892112)
+script = ExtResource("1_fvvxw")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(2.885, 2.42)
+layout_mode = 0
+offset_left = -3829.5112
+offset_top = -1777.9874
+offset_right = 4520.5513
+offset_bottom = 2815.2666
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 7.918163
+offset_top = 68.38413
+offset_right = 436.91815
+offset_bottom = 269.38412
+text = "Controled Chaos"
+label_settings = SubResource("LabelSettings_x1xlv")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 948.7398
+offset_top = 295.85135
+offset_right = 1377.7399
+offset_bottom = 496.85135
+text = "WASD or Arrows
+to move"
+label_settings = SubResource("LabelSettings_fvvxw")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Label3" type="Label" parent="."]
+layout_mode = 0
+offset_left = 942.9812
+offset_top = 478.68893
+offset_right = 1371.9812
+offset_bottom = 679.68896
+text = "mouse to shoot
+"
+label_settings = SubResource("LabelSettings_fvvxw")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1148.1335, 129.56993)
+scale = Vector2(0.49801192, 0.49801192)
+texture = ExtResource("2_fvvxw")
+
+[node name="StartButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 46.789143
+offset_top = 385.1106
+offset_right = 844.7891
+offset_bottom = 736.1106
+scale = Vector2(0.28595418, 0.2716961)
+icon = ExtResource("3_om8st")
+icon_alignment = 1
+
+[node name="Label2" type="Label" parent="StartButton"]
+layout_mode = 0
+offset_left = 160.86493
+offset_top = 88.33398
+offset_right = 643.4597
+offset_bottom = 286.39038
+text = "Start"
+label_settings = SubResource("LabelSettings_7m0q0")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 45.349476
+offset_top = 539.87476
+offset_right = 843.3495
+offset_bottom = 890.8748
+scale = Vector2(0.28595418, 0.2716961)
+icon = ExtResource("3_om8st")
+icon_alignment = 1
+
+[node name="Label3" type="Label" parent="Button2"]
+layout_mode = 0
+offset_left = 157.36783
+offset_top = 80.97272
+offset_right = 639.96265
+offset_bottom = 279.0291
+text = "Quit"
+label_settings = SubResource("LabelSettings_7m0q0")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[connection signal="pressed" from="StartButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
