@@ -21,6 +21,11 @@ StatsManager="*res://Scripts/StatsManager.gd"
 UpgradeDB="*res://Scripts/UpgradeDB.gd"
 AssetPaths="*res://Scripts/AssetPaths.gd"
 
+[global_group]
+
+player=""
+gates=""
+
 [input]
 
 ui_left={

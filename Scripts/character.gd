@@ -21,6 +21,8 @@ var is_fully_charged: bool = false
 var can_attack: bool = true
 var current_weapon_node: Node2D
 
+var collected_keys: Array[String] = []
+
 # --- Node References ---
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var weapon_holder: Node2D = $WeaponHolder
@@ -297,3 +299,27 @@ func update_animation(direction: Vector2) -> void:
 			Direction.LEFT:
 				anim_sprite.flip_h = true
 				anim_sprite.play("Idle_Right") # Use the same animation, just flipped
+
+
+
+
+func add_key(key_id: String): # <--- هذه هي الدالة التي يجب أن تكون موجودة
+	if not collected_keys.has(key_id):
+		collected_keys.append(key_id)
+		print("Player collected key: ", key_id)
+
+func has_key(key_id: String) -> bool:
+	return collected_keys.has(key_id)
+
+func can_unlock_gate(required_key_id: String) -> bool:
+	return has_key(required_key_id)
+
+func _on_key_collected(key_id_value: String):
+	add_key(key_id_value)
+	add_key(key_id_value)
+	print("Player now has keys: ", collected_keys)
+
+
+#func _on_key_collected(key_id_value: String):
+	#add_key(key_id_value)
+	#print("Player now has keys: ", collected_keys)
