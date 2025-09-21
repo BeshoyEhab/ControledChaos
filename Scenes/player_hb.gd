@@ -1,7 +1,7 @@
 extends Control
 
-@onready var hp_bar = $HPBar
-@onready var hp_label = $HPLabel
+@onready var hp_bar: TextureProgressBar
+@onready var hp_label: Label
 
 var max_hp: float = 100.0:
 	set(value):

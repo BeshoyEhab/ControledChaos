@@ -1,8 +1,8 @@
 extends Control
 
-@onready var time_label = $TimeLabel
-@onready var timer_node = $Timer
-@onready var effect_timer = $EffectTimer
+@onready var time_label: Label
+@onready var timer_node: Timer
+@onready var effect_timer: Timer
 
 var max_time: float = 300.0  # 5 minutes default
 var current_time: float = 0.0

@@ -16,8 +16,6 @@
 [node name="Map" parent="." instance=ExtResource("1_gl6un")]
 
 [node name="Character" parent="." instance=ExtResource("1_iukft")]
-projectile_scene = null
-weapon_scene = null
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
 zoom = Vector2(2.5, 2.5)
@@ -28,14 +26,6 @@ drag_left_margin = 0.25
 drag_top_margin = 0.1
 drag_right_margin = 0.25
 drag_bottom_margin = 0.1
-
-[node name="EnemySpawner" type="Node2D" parent="."]
-script = ExtResource("5_b2bpf")
-enemy_scene = ExtResource("6_7lihs")
-
-[node name="Timer" type="Timer" parent="EnemySpawner"]
-wait_time = 1.663
-autostart = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("3_kldst")
@@ -67,3 +57,11 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("10_71axn")
+
+[node name="EnemySpawner" type="Node2D" parent="."]
+script = ExtResource("5_b2bpf")
+enemy_scene = ExtResource("6_7lihs")
+
+[node name="Timer" type="Timer" parent="EnemySpawner"]
+wait_time = 1.663
+autostart = true
