@@ -116,8 +116,6 @@ func _ready():
 	update_stats_from_manager()
 	current_health = max_health
 	switch_weapon(current_weapon_name)
-	# Direct connection for XP bar update
-	StatsManager.player_xp_updated.connect(get_node("/root/Game/CanvasLayer/GameUI")._on_xp_updated)
 
 func _process(delta: float):
 	handle_input()

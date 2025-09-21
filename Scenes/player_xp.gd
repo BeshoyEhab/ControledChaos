@@ -1,8 +1,8 @@
 extends Control
 
-@onready var xp_bar = $XPBar
-@onready var xp_label = $XPLabel
-@onready var level_label = $LevelLabel
+@onready var xp_bar: TextureProgressBar
+@onready var xp_label: Label
+@onready var level_label: Label
 
 var current_xp: float = 0.0:
 	set(value):
