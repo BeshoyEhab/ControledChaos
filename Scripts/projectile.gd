@@ -57,16 +57,16 @@ func _physics_process(delta: float):
 	velocity.y += gravity * delta
 	
 	# Rotate with velocity if enabled
-	rotation = velocity.angle()
+	if rotate_with_velocity and velocity.length() > 0:
+		rotation = velocity.angle()
 	
 	# Track travel distance for range-limited projectiles
-	var old_position = global_position
+	var _old_position = global_position
 	
 	# Move without collision detection first
 	var motion = velocity * delta
 	
 	# Use test_move to check for collisions without stopping
-	var collision_found = false
 	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsRayQueryParameters2D.create(global_position, global_position + motion)
 	query.exclude = [self]
@@ -75,7 +75,6 @@ func _physics_process(delta: float):
 	
 	if result:
 		var collider = result.collider
-		collision_found = true
 		print("Ray detected collision with: ", collider.name if collider else "unknown")
 		
 		# Handle the collision but don't stop movement for penetrating projectiles
@@ -86,10 +85,14 @@ func _physics_process(delta: float):
 	
 	# Update travel distance
 	travel_distance += motion.length()
-	if is_in_group("player_projectiles"):
+	
+	# Update animation positions
+	if is_in_group("player_projectiles") and anim_player:
 		anim_player.global_position = global_position
-	elif is_in_group("enemy_projectiles"):
+		anim_player.rotation = rotation
+	elif is_in_group("enemy_projectiles") and anim_enemy:
 		anim_enemy.global_position = global_position
+		anim_enemy.rotation = rotation
 	
 	# Check if projectile has exceeded max range
 	if max_range > 0 and travel_distance >= max_range:
@@ -167,6 +170,27 @@ func set_texture(texture_path: String):
 	else:
 		_create_fallback_visual()
 
+func set_projectile_scale(new_scale: float):
+	"""Dynamically set projectile scale and update collision shape accordingly"""
+	scale = Vector2.ONE * new_scale
+	
+	# Update collision shape if it exists
+	if collision and collision.shape:
+		if collision.shape is CircleShape2D:
+			var circle_shape = collision.shape as CircleShape2D
+			circle_shape.radius = 10.0 * new_scale  # Base radius * scale
+		elif collision.shape is RectangleShape2D:
+			var rect_shape = collision.shape as RectangleShape2D
+			rect_shape.size = Vector2(16, 16) * new_scale  # Base size * scale
+	
+	# Update animation scales
+	if anim_player:
+		anim_player.scale = Vector2.ONE * new_scale
+	if anim_enemy:
+		anim_enemy.scale = Vector2.ONE * new_scale
+	
+	print("Projectile scale set to: ", new_scale)
+
 func _create_fallback_visual():
 	"""Create a simple colored rectangle if texture fails to load."""
 	# Create new fallback visual
@@ -185,8 +209,8 @@ func _create_fallback_visual():
 	color_rect.pivot_offset = color_rect.size / 2
 	print("Created fallback projectile visual")
 
-func handle_collision(collision: KinematicCollision2D):
-	var collider = collision.get_collider()
+func handle_collision(collision_info: KinematicCollision2D):
+	var collider = collision_info.get_collider()
 	print("Projectile collision with: ", collider.name if collider else "unknown")
 	
 	# --- Logic to prevent friendly fire ---
@@ -232,7 +256,7 @@ func handle_collision(collision: KinematicCollision2D):
 			"bounce":
 				if bounces_left > 0:
 					print("Projectile bouncing, bounces left: ", bounces_left - 1)
-					velocity = velocity.bounce(collision.get_normal())
+					velocity = velocity.bounce(collision_info.get_normal())
 					bounces_left -= 1
 				else:
 					print("No bounces left, projectile disappearing")
@@ -249,7 +273,7 @@ func handle_collision(collision: KinematicCollision2D):
 				queue_free()
 			"bounce":
 				if bounces_left > 0:
-					velocity = velocity.bounce(collision.get_normal())
+					velocity = velocity.bounce(collision_info.get_normal())
 					bounces_left -= 1
 					print("Bounced off obstacle")
 				else: 

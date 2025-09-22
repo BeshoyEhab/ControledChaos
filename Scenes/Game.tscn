@@ -6,13 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://cpop36rlb46lx" path="res://Scenes/LevelUpUI.tscn" id="3_j5yw3"]
 [ext_resource type="Script" uid="uid://qohd8x3s1umo" path="res://Scripts/GameUI.gd" id="3_kldst"]
 [ext_resource type="PackedScene" uid="uid://duwqr38w7ub52" path="res://Scenes/Weapon.tscn" id="4_3so38"]
-[ext_resource type="Script" uid="uid://d3demqa2op6qd" path="res://Scripts/EnemySpawner.gd" id="5_b2bpf"]
+[ext_resource type="Script" path="res://Scripts/EnhancedEnemySpawner.gd" id="5_b2bpf"]
 [ext_resource type="Script" uid="uid://cvci1kh858m1c" path="res://Scripts/player_hb.gd" id="6_2irst"]
 [ext_resource type="PackedScene" uid="uid://dkuhwwc41ups8" path="res://Scenes/Enemy.tscn" id="6_7lihs"]
 [ext_resource type="Script" uid="uid://bk4ofy55hqj7n" path="res://Scripts/player_xp.gd" id="7_bf53h"]
 [ext_resource type="PackedScene" uid="uid://c4q4hl0afd4ce" path="res://Scenes/Card.tscn" id="7_fgofq"]
 [ext_resource type="Script" uid="uid://c504pqmytj8y3" path="res://Scripts/game_timer.gd" id="10_71axn"]
 [ext_resource type="FontFile" uid="uid://ca313xqdvxrpm" path="res://sprites/antiquity-print.ttf" id="11_dahhg"]
+[ext_resource type="PackedScene" uid="uid://cf4lql05ekhcr" path="res://Scenes/music.tscn" id="14_wxwew"]
+[ext_resource type="PackedScene" uid="uid://bq8x4k2m3n7p9" path="res://Scenes/EnhancedUI.tscn" id="15_enhanced_ui"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_3so38"]
 font = ExtResource("11_dahhg")
@@ -24,6 +26,7 @@ font_color = Color(0.89182436, 0.63201815, 0.1442304, 1)
 [node name="Map" parent="." instance=ExtResource("1_gl6un")]
 
 [node name="Character" parent="." instance=ExtResource("1_iukft")]
+position = Vector2(-461, 554)
 projectile_scene = ExtResource("3_dahhg")
 weapon_scene = ExtResource("4_3so38")
 
@@ -66,6 +69,7 @@ offset_bottom = 40.0
 script = ExtResource("10_71axn")
 
 [node name="EnemySpawner" type="Node2D" parent="."]
+position = Vector2(344, 505)
 script = ExtResource("5_b2bpf")
 enemy_scene = ExtResource("6_7lihs")
 
@@ -74,11 +78,15 @@ wait_time = 1.663
 autostart = true
 
 [node name="Label" type="Label" parent="."]
-offset_left = -57.0
-offset_top = 557.0
-offset_right = 119.0
-offset_bottom = 594.0
-text = "You need to find the key and go to the gate"
+offset_left = -431.0
+offset_top = 524.0
+offset_right = -255.0
+offset_bottom = 561.0
+text = "You need to find the key then go to the gate to get out"
 label_settings = SubResource("LabelSettings_3so38")
 horizontal_alignment = 1
 autowrap_mode = 2
+
+[node name="Node2D" parent="." instance=ExtResource("14_wxwew")]
+
+[node name="EnhancedUI" parent="." instance=ExtResource("15_enhanced_ui")]

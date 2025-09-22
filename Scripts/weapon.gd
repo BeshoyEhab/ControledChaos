@@ -4,15 +4,31 @@ var weapon_data: Dictionary
 var owner_character: CharacterBody2D
 var weapon: String
 
-@onready var shotgun: Sprite2D = $shotgun
-@onready var rifel: Sprite2D = $rifel
-@onready var gun: Sprite2D = $gun
-@onready var staff: Sprite2D = $staff
+var shotgun: Sprite2D
+var rifel: Sprite2D
+var gun: Sprite2D
+var staff: Sprite2D
 
-@onready var anim_shotgun: AnimatedSprite2D = $shotgun/anim_shotgun
-@onready var anim_rifel: AnimatedSprite2D = $rifel/anim_rifel
-@onready var anim_gun: AnimatedSprite2D = $gun/anim_gun
-@onready var anim_staff: AnimatedSprite2D = $staff/anim_staff
+var anim_shotgun: AnimatedSprite2D
+var anim_rifel: AnimatedSprite2D
+var anim_gun: AnimatedSprite2D
+var anim_staff: AnimatedSprite2D
+
+func _ready():
+	# Get weapon nodes safely
+	shotgun = get_node_or_null("shotgun")
+	rifel = get_node_or_null("rifel")
+	gun = get_node_or_null("gun")
+	staff = get_node_or_null("staff")
+	
+	if shotgun:
+		anim_shotgun = get_node_or_null("shotgun/anim_shotgun")
+	if rifel:
+		anim_rifel = get_node_or_null("rifel/anim_rifel")
+	if gun:
+		anim_gun = get_node_or_null("gun/anim_gun")
+	if staff:
+		anim_staff = get_node_or_null("staff/anim_staff")
 
 var current_sprite: Sprite2D
 var current_anim: AnimatedSprite2D
@@ -22,24 +38,18 @@ func order_attack():
 	if not is_instance_valid(owner_character) or weapon_data.is_empty(): 
 		print("ERROR: Invalid owner or empty weapon data")
 		return
-		
-	var attack_mode = weapon_data.get("attack_mode", "projectile")
-	print("Weapon attack mode: ", attack_mode)
-	print("Weapon data: ", weapon_data)
 	
-	match attack_mode:
-		"projectile", "lobbed":
-			# Let the character handle all projectile logic including bursts and spreads
-			owner_character.execute_projectile_attack(weapon_data)
-		"melee":
-			owner_character.execute_melee_attack(weapon_data)
-		"hitscan":
-			owner_character.execute_hitscan_attack(weapon_data)
-	
-	current_anim.visible = true
-	current_anim.play(weapon)
-	await current_anim.animation_finished
-	current_anim.visible = false
+	# Weapon attacks are now handled by WeaponManager
+	# This function is kept for compatibility but delegates to the character
+	owner_character.order_attack()
+
+func play_attack_animation():
+	"""Play weapon attack animation"""
+	if current_anim and is_instance_valid(current_anim):
+		current_anim.visible = true
+		current_anim.play(weapon)
+		await current_anim.animation_finished
+		current_anim.visible = false
 	
 
 func set_appearance():

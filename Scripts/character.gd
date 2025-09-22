@@ -52,14 +52,24 @@ const INVULN_BLINK_SPEED: float = 0.1
 @export var weapon_orbit_radius: float = 10.0
 @export var current_weapon_name: StringName = &"shotgun"
 
-# --- Weapon Database (same as before) ---
-var WEAPONS: Dictionary = UpgradeDB.WEAPONS
+# --- Weapon System ---
+var weapon_manager
 
 func _ready():
 	add_to_group("player")
 	StatsManager.stats_updated.connect(update_stats_from_manager)
 	update_stats_from_manager()
 	current_health = max_health
+	
+	# Initialize weapon manager
+	weapon_manager = preload("res://Scripts/WeaponManager.gd").instance
+	if not weapon_manager:
+		var weapon_manager_class = preload("res://Scripts/WeaponManager.gd")
+		weapon_manager = weapon_manager_class.new()
+		get_tree().root.add_child(weapon_manager)
+	
+	# Connect weapon manager signals
+	weapon_manager.weapon_switched.connect(_on_weapon_switched)
 	
 	# Debug: Print exported scene assignments
 	print("=== Character Scene Setup ===")
@@ -78,7 +88,7 @@ func _process(delta: float):
 	handle_weapon_rotation()
 	handle_invulnerability(delta)
 
-func _physics_process(delta: float):
+func _physics_process(_delta: float):
 	handle_movement()
 
 # --- Enhanced Stats Update ---
@@ -132,6 +142,8 @@ func take_damage(amount: float):
 		start_invulnerability()
 	
 	if current_health <= 0:
+		player_died.emit()
+		queue_free()
 		die()
 
 func start_invulnerability():
@@ -170,7 +182,6 @@ func on_enemy_killed():
 
 func die():
 	print("Player died!")
-	get_tree().reload_current_scene()
 
 # --- Input, Movement, Weapon Rotation (same as before) ---
 func handle_input():
@@ -200,19 +211,31 @@ func handle_weapon_rotation():
 	var angle_deg = rad_to_deg(weapon_holder.rotation)
 	current_weapon_node.scale.y = -1 if angle_deg > 90 or angle_deg < -90 else 1
 
-# --- Weapon & Attack Logic (same switching logic) ---
+# --- Weapon & Attack Logic ---
 func switch_weapon(weapon_name: StringName):
 	print("switch_weapon() called with: ", weapon_name)
 	
-	if not WEAPONS.has(weapon_name): 
-		print("Warning: Weapon '", weapon_name, "' not found in WEAPONS database")
+	if not weapon_manager:
+		print("ERROR: Weapon manager not initialized")
 		return
-		
+	
+	# Use weapon manager to switch weapon
+	if weapon_manager.switch_weapon(weapon_name):
+		current_weapon_name = weapon_name
+		_update_weapon_visual()
+	else:
+		print("Failed to switch weapon: ", weapon_name)
+
+func _on_weapon_switched(weapon_name: StringName, _weapon_data: Dictionary):
+	print("Weapon switched signal received: ", weapon_name)
+	current_weapon_name = weapon_name
+	_update_weapon_visual()
+
+func _update_weapon_visual():
+	# Remove old weapon node
 	if is_instance_valid(current_weapon_node): 
 		print("Removing old weapon node")
 		current_weapon_node.queue_free()
-	while weapon_name == current_weapon_name:
-		weapon_name = WEAPONS.keys().pick_random()
 	
 	# Safety check for weapon_scene
 	if not weapon_scene:
@@ -220,15 +243,14 @@ func switch_weapon(weapon_name: StringName):
 		# Create a simple fallback weapon node for testing
 		current_weapon_node = Node2D.new()
 		current_weapon_node.name = "FallbackWeapon"
-		var weapon_data = WEAPONS[weapon_name]
+		var fallback_weapon_data = weapon_manager.get_current_weapon()
 		
 		# Use set_meta() to store weapon data on a basic Node2D
-		current_weapon_node.set_meta("weapon_data", weapon_data)
+		current_weapon_node.set_meta("weapon_data", fallback_weapon_data)
 		current_weapon_node.set_meta("owner_character", self)
-		current_weapon_name = weapon_name
 		
 		weapon_holder.add_child(current_weapon_node)
-		current_weapon_node.weapon = weapon_name
+		current_weapon_node.weapon = current_weapon_name
 		current_weapon_node.set_appearance()
 		print("Created fallback weapon node")
 		return
@@ -239,64 +261,33 @@ func switch_weapon(weapon_name: StringName):
 		print("ERROR: Failed to instantiate weapon scene")
 		return
 		
-	var weapon_data = WEAPONS[weapon_name]
+	var weapon_data = weapon_manager.get_current_weapon()
 	current_weapon_node.owner_character = self
 	current_weapon_node.weapon_data = weapon_data
 	
 	current_weapon_node.position.x = weapon_orbit_radius
-	current_weapon_name = weapon_name
 	weapon_holder.add_child(current_weapon_node)
-	current_weapon_node.weapon = weapon_name
+	current_weapon_node.weapon = current_weapon_name
 	current_weapon_node.set_appearance()
-	print("Successfully switched to weapon: ", weapon_name)
+	print("Successfully switched to weapon: ", current_weapon_name)
 	print("Weapon data assigned: ", weapon_data)
 
 func order_attack():
 	print("order_attack() called")
 	
-	if not is_instance_valid(current_weapon_node): 
-		print("ERROR: current_weapon_node is not valid!")
+	if not weapon_manager:
+		print("ERROR: Weapon manager not initialized!")
 		return
 	
-	# Check if weapon has the order_attack method (proper weapon script)
-	if current_weapon_node.has_method("order_attack"):
-		print("Using weapon's order_attack method")
-		current_weapon_node.order_attack()
-	else:
-		print("Weapon doesn't have order_attack method, using fallback")
-		# Fallback for basic Node2D weapons
-		var weapon_data = null
-		if current_weapon_node.has_meta("weapon_data"):
-			weapon_data = current_weapon_node.get_meta("weapon_data")
-		
-		if not weapon_data:
-			print("ERROR: weapon_data is null!")
-			return
-			
-		if not weapon_data.has("damage"): 
-			print("ERROR: weapon_data has no damage property!")
-			return
-		
-		print("Fallback weapon data: ", weapon_data)
-		print("Attack mode: ", weapon_data.get("attack_mode", "unknown"))
-		
-		# Handle burst fire for projectile weapons
-		if weapon_data.attack_mode == "projectile" or weapon_data.attack_mode == "lobbed":
-			print("Executing projectile attack")
-			var burst_count = weapon_data.get("burst_count", 1)
-			var burst_delay = weapon_data.get("burst_delay", 0.0)
-			for i in range(burst_count):
-				execute_projectile_attack(weapon_data)
-				if burst_delay > 0 and i < burst_count - 1:
-					await get_tree().create_timer(burst_delay).timeout
-		else:
-			print("Executing other attack type: ", weapon_data.attack_mode)
-			match weapon_data.attack_mode:
-				"melee": execute_melee_attack(weapon_data)
-				"hitscan": execute_hitscan_attack(weapon_data)
+	# Use weapon manager to fire weapon
+	var _projectiles = weapon_manager.fire_weapon(self, projectile_scene, weapon_holder)
+	
+	# Play weapon animation if weapon node exists
+	if is_instance_valid(current_weapon_node) and current_weapon_node.has_method("play_attack_animation"):
+		current_weapon_node.play_attack_animation()
 	
 	# Apply cooldown from stats
-	var weapon_data = _get_current_weapon_data()
+	var weapon_data = weapon_manager.get_current_weapon()
 	var final_cooldown = weapon_data.get("cooldown", 0.2) * (current_cooldown / BASE_COOLDOWN)
 	print("Setting can_attack to false, waiting for cooldown: ", final_cooldown)
 	
@@ -305,104 +296,7 @@ func order_attack():
 	can_attack = true
 	print("Attack cooldown finished, can_attack = true")
 
-# Helper function to get weapon data from current weapon
-func _get_current_weapon_data() -> Dictionary:
-	if not is_instance_valid(current_weapon_node):
-		return {}
-	
-	# Check if it's a proper weapon with weapon_data property
-	if current_weapon_node.has_method("get") and "weapon_data" in current_weapon_node:
-		return current_weapon_node.weapon_data
-	# Check if it's a fallback weapon with meta data
-	elif current_weapon_node.has_meta("weapon_data"):
-		return current_weapon_node.get_meta("weapon_data")
-	
-	return {}
-
-# --- Enhanced Projectile Attack ---
-func execute_projectile_attack(data: Dictionary):
-	if projectile_scene == null: 
-		print("ERROR: projectile_scene is null! Please assign a projectile scene in the inspector.")
-		return
-		
-	var base_damage = data["damage"]
-	var base_speed = data["speed"]
-	var scale = data.get("scale", 1.0)
-	var spread_angle_deg = data.get("spread_angle", 0)
-
-	# Use enhanced stats
-	var final_damage = base_damage * (current_damage / BASE_DAMAGE)
-	var final_speed = base_speed * current_projectile_speed
-	var total_projectiles = 1 + current_projectile_count
-
-	var total_spread_angle = spread_angle_deg * (total_projectiles - 1)
-	var start_angle = weapon_holder.rotation - deg_to_rad(total_spread_angle / 2.0)
-	var angle_step = deg_to_rad(spread_angle_deg) if total_projectiles > 1 else 0
-	
-	for j in range(total_projectiles):
-		var p = projectile_scene.instantiate() as CharacterBody2D
-		if not p:
-			print("ERROR: Failed to instantiate projectile")
-			continue
-		
-		p.damage = final_damage
-		p.gravity = data.get("gravity", 0)
-		p.rotate_with_velocity = data.get("rotate_with_velocity", true)
-		p.collision_behavior = data.get("collision_behavior", "disappear")
-		
-		# Apply bounce chance
-		if randf() < current_bounce_chance:
-			p.collision_behavior = "bounce"
-			p.bounces_left = 1
-		
-		# Safe texture loading with fallback
-		if data.has("projectile_texture_path"):
-			if p.has_method("set_texture"):
-				var texture_resource = load(data["projectile_texture_path"])
-				if texture_resource != null:
-					p.set_texture(data["projectile_texture_path"])
-				else:
-					print("Warning: Could not load projectile texture: ", data["projectile_texture_path"])
-					_create_fallback_projectile_visual(p)
-			else:
-				_create_fallback_projectile_visual(p)
-		else:
-			_create_fallback_projectile_visual(p)
-		
-		var current_angle = start_angle + (angle_step * j)
-		
-		p.initial_velocity = Vector2.RIGHT.rotated(current_angle) * final_speed
-		p.scale = Vector2.ONE * scale
-		p.global_position = weapon_holder.global_position
-		p.rotation = current_angle
-		p.type = data["projectile"]
-		
-		# Add to player_projectiles group for friendly fire prevention
-		p.add_to_group("player_projectiles")
-		p.set_collision_layer_value(6, true)
-		p.set_collision_layer_value(5, false)
-		p.set_collision_mask_value(2, true)
-		p.set_collision_mask_value(1, false)
-		get_tree().get_root().add_child(p)
-
-# --- Enhanced Melee Attack ---
-func execute_melee_attack(data: Dictionary):
-	var final_damage = data["damage"] * (current_damage / BASE_DAMAGE)
-	melee_area.monitoring = true
-	for body in melee_area.get_overlapping_bodies():
-		if body.is_in_group("enemies") and body.has_method("take_damage"):
-			body.take_damage(final_damage)
-	await get_tree().create_timer(0.1).timeout
-	melee_area.monitoring = false
-
-# --- Enhanced Hitscan Attack ---
-func execute_hitscan_attack(data: Dictionary):
-	hitscan_ray.force_raycast_update()
-	if hitscan_ray.is_colliding():
-		var collider = hitscan_ray.get_collider()
-		if collider.is_in_group("enemies") and collider.has_method("take_damage"):
-			var final_damage = data["damage"] * (current_damage / BASE_DAMAGE)
-			collider.take_damage(final_damage)
+# Weapon attack functions are now handled by WeaponManager
 
 func _on_charge_timer_timeout():
 	if is_charging: is_fully_charged = true
@@ -490,8 +384,3 @@ func _on_key_collected(key_id_value: String):
 	add_key(key_id_value)
 	add_key(key_id_value)
 	print("Player now has keys: ", collected_keys)
-
-
-#func _on_key_collected(key_id_value: String):
-	#add_key(key_id_value)
-	#print("Player now has keys: ", collected_keys)

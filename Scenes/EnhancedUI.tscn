@@ -1,0 +1,232 @@
+[gd_scene load_steps=4 format=3 uid="uid://bq8x4k2m3n7qa"]
+
+[ext_resource type="Script" path="res://Scripts/EnhancedUI.gd" id="1_enhanced_ui"]
+[ext_resource type="FontFile" uid="uid://ca313xqdvxrpm" path="res://sprites/antiquity-print.ttf" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ui"]
+bg_color = Color(0, 0, 0, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="EnhancedUI" type="CanvasLayer"]
+script = ExtResource("1_enhanced_ui")
+
+[node name="WeaponInfo" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 50.0
+offset_right = -20.0
+offset_bottom = 150.0
+
+[node name="Background" type="Panel" parent="WeaponInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ui")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WeaponInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="WeaponName" type="Label" parent="WeaponInfo/VBoxContainer"]
+layout_mode = 2
+text = "Current Weapon"
+horizontal_alignment = 1
+
+[node name="WeaponStats" type="VBoxContainer" parent="WeaponInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="DamageLabel" type="Label" parent="WeaponInfo/VBoxContainer/WeaponStats"]
+layout_mode = 2
+text = "Damage: 100"
+
+[node name="SpeedLabel" type="Label" parent="WeaponInfo/VBoxContainer/WeaponStats"]
+layout_mode = 2
+text = "Speed: 800"
+
+[node name="CooldownLabel" type="Label" parent="WeaponInfo/VBoxContainer/WeaponStats"]
+layout_mode = 2
+text = "Cooldown: 0.25s"
+
+[node name="HSeparator" type="HSeparator" parent="WeaponInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="ProjectileInfo" type="VBoxContainer" parent="WeaponInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="ProjectileCountLabel" type="Label" parent="WeaponInfo/VBoxContainer/ProjectileInfo"]
+layout_mode = 2
+text = "Projectiles: 1"
+
+[node name="ProjectileSizeLabel" type="Label" parent="WeaponInfo/VBoxContainer/ProjectileInfo"]
+layout_mode = 2
+text = "Size: 1.0x"
+
+[node name="ProjectileSpeedLabel" type="Label" parent="WeaponInfo/VBoxContainer/ProjectileInfo"]
+layout_mode = 2
+text = "Speed: 1.0x"
+
+[node name="StatsInfo" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 3
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = -20.0
+
+[node name="Background" type="Panel" parent="StatsInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ui")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="StatsInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="Title" type="Label" parent="StatsInfo/VBoxContainer"]
+layout_mode = 2
+text = "Enhanced Stats"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="StatsInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="StatsContainer" type="VBoxContainer" parent="StatsInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpeedStat" type="HBoxContainer" parent="StatsInfo/VBoxContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/SpeedStat"]
+layout_mode = 2
+text = "Speed:"
+
+[node name="Value" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/SpeedStat"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1.0x"
+horizontal_alignment = 2
+
+[node name="DamageStat" type="HBoxContainer" parent="StatsInfo/VBoxContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/DamageStat"]
+layout_mode = 2
+text = "Damage:"
+
+[node name="Value" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/DamageStat"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1.0x"
+horizontal_alignment = 2
+
+[node name="ProjectileCountStat" type="HBoxContainer" parent="StatsInfo/VBoxContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/ProjectileCountStat"]
+layout_mode = 2
+text = "Projectiles:"
+
+[node name="Value" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/ProjectileCountStat"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+horizontal_alignment = 2
+
+[node name="LifestealStat" type="HBoxContainer" parent="StatsInfo/VBoxContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/LifestealStat"]
+layout_mode = 2
+text = "Lifesteal:"
+
+[node name="Value" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/LifestealStat"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0%"
+horizontal_alignment = 2
+
+[node name="CritChanceStat" type="HBoxContainer" parent="StatsInfo/VBoxContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/CritChanceStat"]
+layout_mode = 2
+text = "Crit Chance:"
+
+[node name="Value" type="Label" parent="StatsInfo/VBoxContainer/StatsContainer/CritChanceStat"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0%"
+horizontal_alignment = 2
+
+[node name="EnemyInfo" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -300.0
+offset_right = 250.0
+offset_bottom = -200.0
+
+[node name="Background" type="Panel" parent="EnemyInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ui")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EnemyInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="Title" type="Label" parent="EnemyInfo/VBoxContainer"]
+layout_mode = 2
+text = "Enemy Info"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="EnemyInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="AliveLabel" type="Label" parent="EnemyInfo/VBoxContainer"]
+layout_mode = 2
+text = "Alive: 0"
+horizontal_alignment = 1
+
+[node name="SpawnedLabel" type="Label" parent="EnemyInfo/VBoxContainer"]
+layout_mode = 2
+text = "Spawned: 0"
+horizontal_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="EnemyInfo/VBoxContainer"]
+layout_mode = 2
+text = "Level: 1"
+horizontal_alignment = 1

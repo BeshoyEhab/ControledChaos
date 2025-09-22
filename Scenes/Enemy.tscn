@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dkuhwwc41ups8"]
+[gd_scene load_steps=4 format=3 uid="uid://dkuhwwc41ups8"]
 
 [ext_resource type="Script" uid="uid://5r0qvhscbtnc" path="res://Scripts/enemy.gd" id="1_tt7e2"]
+[ext_resource type="Texture2D" uid="uid://cpxixmntsmawf" path="res://sprites/2D Pixel Dungeon Asset Pack/Character_animation/monsters_idle/skeleton1/v2/skeleton_v2_4.png" id="5_uoxpr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gqquq"]
 radius = 14.3178
@@ -8,14 +9,44 @@ radius = 14.3178
 [node name="Enemy" type="CharacterBody2D"]
 z_index = 10
 collision_layer = 2
-collision_mask = 0
+collision_mask = 1
 script = ExtResource("1_tt7e2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_gqquq")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("5_uoxpr")
 
 [node name="AttackTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -20.0
+offset_top = -25.0
+offset_right = 20.0
+offset_bottom = -20.0
+value = 100.0
+show_percentage = false
+visible = false
+
+[node name="EliteLabel" type="Label" parent="."]
+offset_left = -30.0
+offset_top = -35.0
+offset_right = 30.0
+offset_bottom = -25.0
+text = "ELITE"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible = false
+
+[node name="BossLabel" type="Label" parent="."]
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = -30.0
+text = "BOSS"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible = false
